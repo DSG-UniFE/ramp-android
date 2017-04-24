@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    tools:context=".service.application.ChatComunicationSupportActivity" xmlns:android="http://schemas.android.com/apk/res/android">
+
+             	<ScrollView
+             	    android:layout_width="fill_parent"
+             	    android:layout_height="wrap_content" >
+
+     <LinearLayout
+         android:id="@+id/layout"
+         android:layout_width="match_parent"
+         android:layout_height="fill_parent"
+
+         android:orientation="vertical"
+         android:paddingBottom="5px"
+         android:paddingLeft="5px"
+         android:paddingRight="5px"
+         android:paddingTop="5px"
+         android:scrollbars="vertical" >
+   
+         <TextView
+                android:id="@+id/userTitleChat"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Chatting with: "
+                android:textColor="#FF6600"
+                android:textStyle="bold" />
+
+         	<TableLayout
+         	    android:id="@+id/userInfoTable"
+         	    android:layout_width="match_parent"
+         	    android:layout_height="wrap_content"
+         	    android:orientation="vertical"
+         	    android:paddingTop="5dp" >
+        	</TableLayout>
+
+			<EditText
+			    android:id="@+id/chatText"
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:layout_weight="1"
+			    android:background="#ffffff"
+			    android:enabled="false"
+			    android:gravity="top"
+			    android:overScrollMode="always"
+			    android:scrollbars="vertical"
+			    android:text=""
+			    android:textColor="#000000"
+			    android:textSize="18sp" />
+			
+			<TableLayout
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:layout_gravity="bottom"
+			    android:layout_weight="1"
+			    android:orientation="vertical"
+			    android:paddingBottom="5px"
+			    android:paddingTop="10px" >
+
+  				<TableRow
+                   android:layout_width="fill_parent"
+                   android:layout_height="fill_parent"
+                   android:layout_weight="1"
+                   android:orientation="horizontal" >
+
+ 				 <EditText
+ 				     android:id="@+id/message"
+ 				     android:layout_width="fill_parent"
+ 				     android:layout_height="fill_parent"
+ 				     android:layout_weight="10"
+ 				     android:text=""
+ 				     android:textSize="18sp" />
+
+  				<Button
+  				    android:id="@+id/sendButton"
+  				    android:layout_width="fill_parent"
+  				    android:layout_height="fill_parent"
+  				    android:layout_weight="1"
+  				    android:text="Send" />
+
+   				</TableRow>
+        
+        </TableLayout>
+           
+	</LinearLayout>
+ </ScrollView>
+</RelativeLayout>

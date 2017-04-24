@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<array name="contacts">
+
+</array>
+
+<array name="stati">
+    <item>ONLINE</item>
+    <item>OFFLINE</item>
+</array>
+</resources>
