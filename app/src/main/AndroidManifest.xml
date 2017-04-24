@@ -41,7 +41,8 @@
         </service>
         <service
             android:name="it.unife.dsg.ramp_android.service.application.MessengerService"
-            android:process=":messenger_service">
+            android:process=":messenger_service"
+            android:exported="true">
         </service>
 
 

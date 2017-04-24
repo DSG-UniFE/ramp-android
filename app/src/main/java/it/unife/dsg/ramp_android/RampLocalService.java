@@ -26,7 +26,7 @@ public class RampLocalService extends Service {
 
     // Unique Identification Number for the Notification.
     // We use it on Notification start, and to cancel it.
-    static private final int RampActiveNotification = it.unife.dsg.ramp_android.R.string.ramp_active_notification;
+    static private final int ActiveNotificationID = R.string.ramp_active_notification;
     //static private final int RampStoppedNotification = 2;
 
     public class RAMPAndroidServiceBinder extends Binder{
@@ -58,7 +58,7 @@ public class RampLocalService extends Service {
         // initialize the Notification
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(it.unife.dsg.ramp_android.R.drawable.ramp_logo)
+                        .setSmallIcon(R.drawable.ramp_logo)
                         .setContentTitle("RAMP")
                         .setTicker("RAMP started")
                         .setWhen(System.currentTimeMillis()).setContentText("RAMP is running")
@@ -67,9 +67,9 @@ public class RampLocalService extends Service {
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         // notifyID allows you to update the notification later on.
-        notificationManager.notify(RampActiveNotification, notificationBuilder.build());
+        notificationManager.notify(ActiveNotificationID, notificationBuilder.build());
 
-        startForeground(RampActiveNotification, notificationBuilder.build());
+        startForeground(ActiveNotificationID, notificationBuilder.build());
     }
 
     @Override

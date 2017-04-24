@@ -23,7 +23,7 @@ public class MessengerService extends Service {
 
     // Unique Identification Number for the Notification.
     // We use it on Notification start, and to cancel it.
-    static private final int RampActiveNotification = R.string.ramp_active_notification;
+    static private final int ActiveNotificationID = R.string.ramp_active_notification;
 
     /**
      * Handler of incoming messages from clients.
@@ -34,7 +34,8 @@ public class MessengerService extends Service {
             switch (msg.what) {
                 case MSG_SAY_HELLO:
                     Toast.makeText(getApplicationContext(), "hello!", Toast.LENGTH_SHORT).show();
-                    showNotification("Received message", "Received message from WifiOpp");
+                    String data = msg.getData().getString("data");
+                    showNotification("Received message", "Received message from WifiOpp" + data);
                     break;
                 default:
                     super.handleMessage(msg);
@@ -71,7 +72,8 @@ public class MessengerService extends Service {
                         .setContentTitle("RAMP")
                         .setTicker(ticker)
                         .setWhen(System.currentTimeMillis()).setContentText(text)
-                        .setContentIntent(contentIntent);
+                        .setContentIntent(contentIntent)
+                        .setAutoCancel(true);
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(7, notificationBuilder.build());

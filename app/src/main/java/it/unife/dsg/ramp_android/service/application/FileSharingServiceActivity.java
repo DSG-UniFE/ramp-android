@@ -50,7 +50,7 @@ public class FileSharingServiceActivity extends Activity implements OnCheckedCha
 
     // Unique Identification Number for the Notification.
     // We use it on Notification start, and to cancel it.
-    static private final int RampActiveNotification = R.string.ramp_active_notification;
+    static private final int ActiveNotificationID = R.string.ramp_active_notification;
 
 	private RampEntryPoint ramp = null;
 	private static FileSharingServiceActivity filesharingServiceInstance = null;
@@ -144,7 +144,7 @@ public class FileSharingServiceActivity extends Activity implements OnCheckedCha
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         // Because the ID remains unchanged, the existing notification is updated.
-        notificationManager.notify(RampActiveNotification, notificationBuilder.build());
+        notificationManager.notify(ActiveNotificationID, notificationBuilder.build());
 
 		// Build notification
 		//Notification notification = new Notification();
