@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".service.application.ChatServiceActivityOld" >
+
+    <Spinner
+        android:id="@+id/statusSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/title" >
+    </Spinner>
+
+    <TextView
+        android:id="@+id/textContact"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/statusSpinner"
+        android:gravity="center"
+        android:text="Contacts" >
+    </TextView>
+
+    <ListView
+        android:id="@+id/listContactChat"
+        android:layout_width="match_parent"
+        android:layout_height="300px"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textContact"
+        android:entries="@array/contacts"
+        android:fitsSystemWindows="true" >
+    </ListView>
+
+    <Button
+        android:id="@+id/startButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/listContactChat"
+        android:text="Chat with selected node" >
+    </Button>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:text="RAMP: Chat Manager"
+        android:textColor="#ffff6600"
+        android:textStyle="bold" >
+    </TextView>
+
+</RelativeLayout>
