@@ -15,15 +15,16 @@ import android.widget.Toast;
 
 import it.unife.dsg.ramp_android.R;
 import it.unife.dsg.ramp_android.RampManagerActivity;
+import it.unife.dsg.ramp_android.util.Constants;
 
 
 public class MessengerService extends Service {
     /** Command to the service to display a message */
-    public static final int MSG_SAY_HELLO = 1;
+    public static final int MSG_SAY_HELLO = 0;
 
     // Unique Identification Number for the Notification.
     // We use it on Notification start, and to cancel it.
-    static private final int ActiveNotificationID = R.string.ramp_active_notification;
+    static private final int ActiveNotificationID = R.string.wifiopp_notification;
 
     /**
      * Handler of incoming messages from clients.
@@ -32,10 +33,15 @@ public class MessengerService extends Service {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case MSG_SAY_HELLO:
-                    Toast.makeText(getApplicationContext(), "hello!", Toast.LENGTH_SHORT).show();
+                case Constants.MESSAGE_TYPE_DEACTIVATE:
+                    //Toast.makeText(getApplicationContext(), "hello!", Toast.LENGTH_SHORT).show();
                     String data = msg.getData().getString("data");
-                    showNotification("Received message", "Received message from WifiOpp" + data);
+                    showNotification("WifiOpp is over", "WifiOpp is over " + data);
+                    break;
+                case Constants.MESSAGE_TYPE_ACTIVATE:
+                    showNotification("WifiOpp is running", "WifiOpp is running");
+                    break;
+                case Constants.MESSAGE_TYPE_CHANGE:
                     break;
                 default:
                     super.handleMessage(msg);
@@ -76,6 +82,6 @@ public class MessengerService extends Service {
                         .setAutoCancel(true);
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(7, notificationBuilder.build());
+        notificationManager.notify(ActiveNotificationID, notificationBuilder.build());
     }
 }
