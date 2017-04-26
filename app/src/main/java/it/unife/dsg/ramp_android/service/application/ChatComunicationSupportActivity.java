@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TableLayout;
@@ -29,7 +30,7 @@ import it.unibo.deis.lia.ramp.service.application.ChatServiceUserProfile;
 *
 * @author Stefano Lanzone
 */
-public class ChatComunicationSupportActivity extends Activity implements OnClickListener{
+public class ChatComunicationSupportActivity extends AppCompatActivity implements OnClickListener{
 
 	private static ChatComunicationSupportActivity chatComSupAct=null;
 	private int chatComId= -1;

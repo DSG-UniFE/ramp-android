@@ -20,6 +20,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -57,7 +58,7 @@ import it.unibo.deis.lia.ramp.service.management.ServiceResponse;
 * @author Stefano Lanzone
 */
 
-public class ChatServiceActivity extends Activity implements
+public class ChatServiceActivity extends AppCompatActivity implements
 		OnClickListener {
 
     // Unique Identification Number for the Notification.

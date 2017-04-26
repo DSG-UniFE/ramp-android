@@ -4,6 +4,7 @@ package it.unife.dsg.ramp_android.service.application;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -28,7 +29,7 @@ import java.util.Vector;
  *
  * @author Carlo Giannelli
  */
-public class FileSharingClientActivity extends Activity  implements OnClickListener {
+public class FileSharingClientActivity extends AppCompatActivity implements OnClickListener {
 
     private FileSharingClient fsc = null;
     private Vector<ServiceResponse> services = null;

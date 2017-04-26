@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,7 +25,7 @@ import java.util.Date;
 *
 * @author Stefano Lanzone
 */
-public class ChatUserMoreInfoActivity extends Activity implements OnClickListener {
+public class ChatUserMoreInfoActivity extends AppCompatActivity implements OnClickListener {
 
 	private TextView userFirstName, userLastName, userBirthdate;
 	private ImageView userProfilePicture;

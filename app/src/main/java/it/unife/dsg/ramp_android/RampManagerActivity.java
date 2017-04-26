@@ -4,7 +4,6 @@ package it.unife.dsg.ramp_android;
 //import java.net.URL;
 //import java.util.Date;
 
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -18,8 +17,7 @@ import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
-import android.os.Messenger;
-import android.os.RemoteException;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -47,7 +45,7 @@ import it.unife.dsg.ramp_android.util.Util;
  *
  * @author Carlo Giannelli
  */
-public class RampManagerActivity extends Activity implements OnClickListener, OnCheckedChangeListener {
+public class RampManagerActivity extends AppCompatActivity implements OnClickListener, OnCheckedChangeListener {
     
     private static RampEntryPoint ramp = null;
     private static RampManagerActivity managerActivity=null;

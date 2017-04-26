@@ -12,6 +12,7 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -32,7 +33,7 @@ import java.lang.reflect.Method;
  *
  * @author Carlo Giannelli
  */
-public class FileSharingServiceActivity extends Activity implements OnCheckedChangeListener, OnClickListener {
+public class FileSharingServiceActivity extends AppCompatActivity implements OnCheckedChangeListener, OnClickListener {
 	
 	private ServiceConnection sc = new ServiceConnection() {
 		@Override

@@ -4,6 +4,7 @@ package it.unife.dsg.ramp_android.service.application;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,7 +28,7 @@ import it.unibo.deis.lia.ramp.core.internode.OpportunisticNetworkingManager.Repl
  *
  * @author Stefano Lanzone
  */
-public class OpportunisticNetworkingManagerActivity extends Activity  implements OnClickListener, OnCheckedChangeListener {
+public class OpportunisticNetworkingManagerActivity extends AppCompatActivity implements OnClickListener, OnCheckedChangeListener {
 
     private OpportunisticNetworkingManager onm = null;
 
