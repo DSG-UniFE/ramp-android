@@ -40,7 +40,6 @@ import it.unibo.deis.lia.ramp.RampEntryPoint;
 //import it.unibo.deis.lia.ramp.core.social.SocialObserver;
 //import it.unibo.deis.lia.ramp.core.social.SocialObserverFacebook;
 //import it.unibo.deis.lia.ramp.service.upnp.UpnpProxyEntrypoint;
-import it.unife.dsg.ramp_android.service.application.MessengerService;
 import it.unife.dsg.ramp_android.util.Util;
 
 
@@ -53,11 +52,6 @@ public class RampManagerActivity extends Activity implements OnClickListener, On
     private static RampEntryPoint ramp = null;
     private static RampManagerActivity managerActivity=null;
     private Handler uiHandler;
-
-    /** Messenger for communicating with the service. */
-    Messenger mService = null;
-    /** Flag indicating whether we have called bind on the service. */
-    boolean mBound;
 
 //    private Facebook facebook;
 //    private SocialObserverFacebook socialObserverFacebook;
@@ -98,51 +92,10 @@ public class RampManagerActivity extends Activity implements OnClickListener, On
         }
     };
 
-    /**
-     * Class for interacting with the main interface of the service.
-     */
-    private ServiceConnection mConnection = new ServiceConnection() {
-        public void onServiceConnected(ComponentName className, IBinder service) {
-            // This is called when the connection with the service has been
-            // established, giving us the object we can use to
-            // interact with the service.  We are communicating with the
-            // service using a Messenger, so here we get a client-side
-            // representation of that from the raw IBinder object.
-            mService = new Messenger(service);
-            mBound = true;
-        }
-
-        public void onServiceDisconnected(ComponentName className) {
-            // This is called when the connection with the service has been
-            // unexpectedly disconnected -- that is, its process crashed.
-            mService = null;
-            mBound = false;
-        }
-    };
-
     //private MulticastLock wifiMulticastLock;
     
     public synchronized static RampManagerActivity getInstance(){
 	   return managerActivity;
-    }
-
-
-    public void sayHello(View v) {
-        if (!mBound) return;
-        // Create and send a message to the service, using a supported 'what' value
-        Message msg = Message.obtain(null, MessengerService.MSG_SAY_HELLO, 0, 0);
-
-        // Create a bundle with the data
-        Bundle bundle = new Bundle();
-        bundle.putString("hello", "giulio");
-
-        // Set the bundle data to the Message
-        msg.setData(bundle);
-        try {
-            mService.send(msg);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
     }
 
 
@@ -528,9 +481,6 @@ public class RampManagerActivity extends Activity implements OnClickListener, On
         if( RampEntryPoint.isActive() ) {
         	bindService(new Intent(this, RampLocalService.class), sc, Context.BIND_AUTO_CREATE);
         }
-
-        // Bind to the service
-        bindService(new Intent(this, MessengerService.class), mConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override

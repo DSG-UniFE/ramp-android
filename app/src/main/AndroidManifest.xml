@@ -38,11 +38,11 @@
                 <action android:name="it.unife.dsg.ramp_android.RampLocalService" />
             </intent-filter>
         </service>
-        <service
-            android:name="it.unife.dsg.ramp_android.service.application.MessengerService"
-            android:process=":messenger_service"
-            android:exported="true">
-        </service>
+        <receiver android:name=".WifiOppReceiver">
+            <intent-filter>
+                <action android:name="it.unife.dsg.ramp_android.action.WIFIOPP"/>
+            </intent-filter>
+        </receiver>
 
 
         <activity
