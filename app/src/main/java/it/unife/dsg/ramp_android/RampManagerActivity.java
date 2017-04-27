@@ -143,7 +143,7 @@ public class RampManagerActivity extends AppCompatActivity implements OnClickLis
         // hide soft keyboard at activity start-up
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
-    
+
     public void onClick(View view) {
         // CheckBox socialConnect;
     	if( ! RampEntryPoint.isActive() ) {

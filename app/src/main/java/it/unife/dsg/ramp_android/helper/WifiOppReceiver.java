@@ -1,4 +1,4 @@
-package it.unife.dsg.ramp_android;
+package it.unife.dsg.ramp_android.helper;
 
 
 import android.app.NotificationManager;
@@ -9,22 +9,42 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 
+import it.unife.dsg.ramp_android.R;
+import it.unife.dsg.ramp_android.RampManagerActivity;
+import it.unife.dsg.ramp_android.util.Constants;
+
 public class WifiOppReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
         //TODO: React to the Intent Broadcast received.
-        System.out.println("new Intent Received ");
+        System.out.println("nWifiOppReceiver:  onReceive");
         System.out.println("Intent Action:" + intent.getAction());
 
-        if (intent.getData() != null)
-            System.out.println("Intent Data:" + intent.getData().toString());
-
-        Bundle extras = intent.getExtras();
-        if (extras != null) {
-            for (String key : extras.keySet()) {
-                System.out.println("Intent Extra key=" + key + ":" + extras.get(key));
-                showNotification(context, "Pippo", "Pluto");
+        if (Constants.WIFIOPP_INTENT_ACTION==intent.getAction()) {
+            Bundle extras = intent.getExtras();
+            if (extras != null) {
+//                    for (String key : extras.keySet()) {
+//                        System.out.println("Intent Extra key=" + key + ":" + extras.get(key));
+//                        showNotification(context, "Pippo", "Pluto");
+//                    }
+                System.out.println(">>> " + extras.getInt("data"));
+                switch (extras.getInt("data")) {
+                    case Constants.MESSAGE_WIFIOPP_DEACTIVATE:
+                        System.out.println("---> " + extras.getInt("data"));
+                        break;
+                    case Constants.MESSAGE_WIFIOPP_ACTIVATE:
+                        System.out.println("---> " + extras.getInt("data"));
+                        break;
+                    case Constants.MESSAGE_ROLE_CHANGED:
+                        System.out.println("---> " + extras.getInt("data"));
+                        break;
+                    case Constants.MESSAGE_HOTSPOT_CHANGED:
+                        System.out.println("---> " + extras.getInt("data"));
+                        break;
+                }
+            } else {
+                System.out.println("RAMO ELSE");
             }
         }
 
