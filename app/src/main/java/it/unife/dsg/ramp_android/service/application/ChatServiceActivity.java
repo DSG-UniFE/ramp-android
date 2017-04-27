@@ -9,7 +9,6 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
 
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;

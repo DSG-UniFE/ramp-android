@@ -1,7 +1,6 @@
 
 package it.unife.dsg.ramp_android.service.application;
 
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -33,7 +32,8 @@ import java.lang.reflect.Method;
  *
  * @author Carlo Giannelli
  */
-public class FileSharingServiceActivity extends AppCompatActivity implements OnCheckedChangeListener, OnClickListener {
+public class FileSharingServiceActivity extends AppCompatActivity implements
+        OnCheckedChangeListener, OnClickListener {
 	
 	private ServiceConnection sc = new ServiceConnection() {
 		@Override
@@ -90,9 +90,11 @@ public class FileSharingServiceActivity extends AppCompatActivity implements OnC
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         switch(buttonView.getId()){
             case R.id.fileSharingServiceActive:
-                System.out.println("FileSharingServiceActivity: onCheckedChanged = R.id.fileSharingServiceActive "+isChecked);
+                System.out.println("FileSharingServiceActivity: onCheckedChanged = " +
+                        "R.id.fileSharingServiceActive " + isChecked);
                 if( isChecked && !FileSharingService.isActive() ){
-                    System.out.println("FileSharingServiceActivity: onCheckedChanged = activating...");
+                    System.out.println("FileSharingServiceActivity: onCheckedChanged = " +
+                            "activating...");
                     if( ramp != null ){
                     	ramp.startService("FileSharingService");
                     }
@@ -104,8 +106,10 @@ public class FileSharingServiceActivity extends AppCompatActivity implements OnC
                 }
                 else if(!isChecked && FileSharingService.isActive()){
                     try{
-                        System.out.println("FileSharingServiceActivity: onCheckedChanged = deactivating...");
-                        Class<?> c = Class.forName("it.unibo.deis.lia.ramp.service.application.FileSharingService");
+                        System.out.println("FileSharingServiceActivity: onCheckedChanged = " +
+                                "deactivating...");
+                        Class<?> c = Class.forName("it.unibo.deis.lia.ramp.service.application." +
+                                "FileSharingService");
                         Method mI = c.getMethod("getInstance");
                         Method mS = c.getMethod("stopService");
                         mS.invoke(mI.invoke(null, new Object[]{}), new Object[]{});
@@ -128,7 +132,8 @@ public class FileSharingServiceActivity extends AppCompatActivity implements OnC
 		// notification is selected
 		Intent intent = new Intent(this, FileSharingClientActivity.class);
 //		intent.putExtra("user", user);
-		PendingIntent pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), intent, 0);
+		PendingIntent pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(),
+                intent, 0);
 
 		String contentText = text;
 
@@ -197,7 +202,8 @@ public class FileSharingServiceActivity extends AppCompatActivity implements OnC
         System.out.println("FileSharingServiceActivity: onResume");
         super.onResume();
         CheckBox fssActive = (CheckBox)findViewById(R.id.fileSharingServiceActive);
-        System.out.println("FileSharingServiceActivity: FileSharingService.isActive() = " + FileSharingService.isActive());
+        System.out.println("FileSharingServiceActivity: FileSharingService.isActive() = " +
+                FileSharingService.isActive());
         fssActive.setChecked(FileSharingService.isActive());
     }
 

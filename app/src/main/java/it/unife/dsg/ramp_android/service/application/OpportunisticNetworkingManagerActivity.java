@@ -1,7 +1,6 @@
 
 package it.unife.dsg.ramp_android.service.application;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -190,7 +189,7 @@ public class OpportunisticNetworkingManagerActivity extends AppCompatActivity im
 //		Util.saveRemoteServices(editor, services);
 
 		// Commit
-		editor.commit();
+		editor.apply();
 		
 		if(onm != null)
 		{
