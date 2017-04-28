@@ -217,6 +217,7 @@
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:orientation="vertical" >
 
             <TableRow
@@ -343,6 +344,7 @@
             android:id="@+id/startchat"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
             android:drawSelectorOnTop="true"
             android:text="@string/chat_with_selected" />
 
@@ -350,6 +352,7 @@
             android:id="@+id/openedChat"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
             android:drawSelectorOnTop="true"
             android:text="@string/chat_session_opened" />
 
@@ -358,7 +361,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="24dp"
             android:gravity="center"
             android:text="@string/broadcast_message"
             android:textAppearance="@android:style/TextAppearance.Medium"
@@ -421,7 +424,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:drawSelectorOnTop="true"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="32dp"
             android:text="@string/back_to_manager" />
 
     </LinearLayout>

@@ -215,7 +215,7 @@
             android:id="@+id/backToManager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="32dp"
             android:drawSelectorOnTop="true"
             android:text="@string/back_to_manager" />
 
