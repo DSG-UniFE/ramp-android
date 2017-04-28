@@ -5,15 +5,20 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import android.content.IntentFilter;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.StrictMode;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
 import it.unibo.deis.lia.ramp.RampEntryPoint;
+import it.unife.dsg.ramp_android.util.Constants;
 
 
 /**
@@ -37,6 +42,23 @@ public class RampLocalService extends Service {
     }
 
     private final IBinder serviceBinder = new RAMPAndroidServiceBinder();
+
+    // Our handler for received Intents. This will be called whenever an Intent
+    // with an action named "Constants.RAMP_INTENT_ACTION" is broadcasted.
+    private BroadcastReceiver RampLocalServiceReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            System.out.println("RampLocalServiceReceiver:  onReceive");
+            System.out.println("Intent Action:" + intent.getAction());
+            if (intent.getAction().equals(Constants.RAMP_INTENT_ACTION)) {
+                // Get extra data included in the Intent
+                int value = intent.getIntExtra("data", -1);
+                Log.d("RampLocalServiceReceive", "Got message: " + value);
+                if (value > 0)
+                    ramp.sentNotifyToOpportunisticNetworkingManager();
+            }
+        }
+    };
 
     @Override
     public void onCreate() {
@@ -70,6 +92,12 @@ public class RampLocalService extends Service {
         notificationManager.notify(ActiveNotificationID, notificationBuilder.build());
 
         startForeground(ActiveNotificationID, notificationBuilder.build());
+
+        // Register to receive messages.
+        // We are registering an observer (mMessageReceiver) to receive Intents
+        // with actions named "Constants.RAMP_INTENT_ACTION".
+        LocalBroadcastManager.getInstance(this).registerReceiver(RampLocalServiceReceiver,
+                new IntentFilter(Constants.RAMP_INTENT_ACTION));
     }
 
     @Override
@@ -86,6 +114,9 @@ public class RampLocalService extends Service {
         
         ramp.stopRamp();
         ramp = null;
+
+        // Unregister since the activity is about to be closed.
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(RampLocalServiceReceiver);
     }
 
     @Override
