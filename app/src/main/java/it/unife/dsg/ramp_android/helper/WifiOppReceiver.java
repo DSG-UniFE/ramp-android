@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
 import it.unife.dsg.ramp_android.R;
 import it.unife.dsg.ramp_android.RampManagerActivity;
@@ -17,34 +19,33 @@ public class WifiOppReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        //TODO: React to the Intent Broadcast received.
-        System.out.println("nWifiOppReceiver:  onReceive");
+        System.out.println("WifiOppReceiver:  onReceive");
         System.out.println("Intent Action:" + intent.getAction());
 
-        if (Constants.WIFIOPP_INTENT_ACTION==intent.getAction()) {
+        if (intent.getAction().equals(Constants.WIFIOPP_INTENT_ACTION)) {
             Bundle extras = intent.getExtras();
             if (extras != null) {
 //                    for (String key : extras.keySet()) {
 //                        System.out.println("Intent Extra key=" + key + ":" + extras.get(key));
 //                        showNotification(context, "Pippo", "Pluto");
 //                    }
-                System.out.println(">>> " + extras.getInt("data"));
+                System.out.println("WifiOppReceiver >>> " + extras.getInt("data"));
                 switch (extras.getInt("data")) {
                     case Constants.MESSAGE_WIFIOPP_DEACTIVATE:
-                        System.out.println("---> " + extras.getInt("data"));
                         break;
                     case Constants.MESSAGE_WIFIOPP_ACTIVATE:
-                        System.out.println("---> " + extras.getInt("data"));
                         break;
                     case Constants.MESSAGE_ROLE_CHANGED:
-                        System.out.println("---> " + extras.getInt("data"));
+                        sendLocalBroadcast(context, Constants.MESSAGE_ROLE_CHANGED);
+                        System.out.println("WifiOppReceiver sent message " +
+                                Constants.MESSAGE_ROLE_CHANGED);
                         break;
                     case Constants.MESSAGE_HOTSPOT_CHANGED:
-                        System.out.println("---> " + extras.getInt("data"));
+                        sendLocalBroadcast(context, Constants.MESSAGE_HOTSPOT_CHANGED);
+                        System.out.println("WifiOppReceiver sent message " +
+                                Constants.MESSAGE_HOTSPOT_CHANGED);
                         break;
                 }
-            } else {
-                System.out.println("RAMO ELSE");
             }
         }
 
@@ -69,5 +70,13 @@ public class WifiOppReceiver extends BroadcastReceiver {
         NotificationManager notificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(13, notificationBuilder.build());
+    }
+
+    // Send an Intent with an action named "intent_type". The Intent sent should
+    // be received by the Receiver.
+    private void sendLocalBroadcast(Context context, int message_id) {
+        Intent intent = new Intent(Constants.RAMP_INTENT_ACTION);
+        intent.putExtra("data", message_id);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 }

@@ -137,9 +137,7 @@ public class RampManagerActivity extends AppCompatActivity implements OnClickLis
         //Stefano Lanzone
         CheckBox cmConnect = (CheckBox)findViewById(R.id.cmConnect);
         cmConnect.setOnCheckedChangeListener(this);
-        
 
-        
         // hide soft keyboard at activity start-up
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
