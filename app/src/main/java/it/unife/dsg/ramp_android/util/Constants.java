@@ -9,4 +9,5 @@ public class Constants {
     public static final int MESSAGE_HOTSPOT_CHANGED = 3;
 
     public static final String WIFIOPP_INTENT_ACTION = "it.unife.dsg.ramp_android.action.WIFIOPP";
+    public static final String RAMP_INTENT_ACTION = "it.unife.dsg.ramp_android.action.RAMP";
 }
