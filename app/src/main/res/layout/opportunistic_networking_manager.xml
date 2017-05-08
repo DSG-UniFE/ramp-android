@@ -149,7 +149,7 @@
             <Spinner
                 android:id="@+id/numberOfOneHopDestinationsSpinner"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:drawSelectorOnTop="true" />
 
         </TableRow>
@@ -203,11 +203,11 @@
                 android:text="@string/mechanism_to_replace_packets"
                 android:textAppearance="@android:style/TextAppearance.Small" />
 
-           <Spinner
-               android:id="@+id/replacePacketsSpinner"
-               android:layout_width="match_parent"
-               android:layout_height="match_parent"
-               android:drawSelectorOnTop="true" />
+            <Spinner
+                android:id="@+id/replacePacketsSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawSelectorOnTop="true" />
 
         </TableRow>
 

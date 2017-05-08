@@ -195,7 +195,7 @@ public class FileSharingClientActivity extends AppCompatActivity implements OnCl
                             		System.out.println("FileSharingClientActivity: send local " +
                                             "file operation expires after " + expiry + " seconds");
                                 }
-                            	
+
                                 fsc.sendLocalFile(
                                         services.elementAt(spinnerServices.getSelectedItemPosition()),
                                         sendingLocalFile, expiry);
