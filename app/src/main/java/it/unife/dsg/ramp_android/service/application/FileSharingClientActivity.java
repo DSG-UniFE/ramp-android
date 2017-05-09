@@ -1,9 +1,9 @@
 
 package it.unife.dsg.ramp_android.service.application;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -28,7 +28,7 @@ import java.util.Vector;
  *
  * @author Carlo Giannelli
  */
-public class FileSharingClientActivity extends Activity  implements OnClickListener {
+public class FileSharingClientActivity extends AppCompatActivity implements OnClickListener {
 
     private FileSharingClient fsc = null;
     private Vector<ServiceResponse> services = null;
@@ -184,21 +184,23 @@ public class FileSharingClientActivity extends Activity  implements OnClickListe
                         if(localFilesSpinner!=null && localFilesSpinner.getSelectedView()!=null){
                             Spinner spinnerServices = (Spinner)findViewById(R.id.remoteServices);
                             String sendingLocalFile = localFilesSpinner.getSelectedItem().toString();
-                            System.out.println("FileSharingClientActivity: sending "+sendingLocalFile);
+                            System.out.println("FileSharingClientActivity: sending " +
+                                    sendingLocalFile);
                             try {
                             	//Get expiry value
                             	int expiry = GenericPacket.UNUSED_FIELD;
-                            	if(RampEntryPoint.isActive() && RampEntryPoint.getInstance(false, null).isContinuityManagerActive())
-                                {
+                            	if(RampEntryPoint.isActive() && RampEntryPoint.getInstance(false,
+                                        null).isContinuityManagerActive()) {
                             		expiry = Integer.parseInt(((EditText)findViewById(R.id.expiryValueLocalFile)).getText().toString());
-                            		System.out.println("FileSharingClientActivity: send local file operation expires after "+expiry+" seconds");
+                            		System.out.println("FileSharingClientActivity: send local " +
+                                            "file operation expires after " + expiry + " seconds");
                                 }
-                            	
+
                                 fsc.sendLocalFile(
                                         services.elementAt(spinnerServices.getSelectedItemPosition()),
-                                        sendingLocalFile, expiry
-                                );
-                                System.out.println("FileSharingClientActivity: local file "+sendingLocalFile+" sent");
+                                        sendingLocalFile, expiry);
+                                System.out.println("FileSharingClientActivity: local file " +
+                                        sendingLocalFile + " sent");
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }
@@ -247,7 +249,7 @@ public class FileSharingClientActivity extends Activity  implements OnClickListe
 		Util.saveRemoteServices(editor, services);
 
 		// Commit
-		editor.commit();
+		editor.apply();
 	}
 
 	private void restoreActivityState(){

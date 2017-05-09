@@ -1,9 +1,10 @@
 
 package it.unife.dsg.ramp_android.service.application;
 
-import android.app.Activity;
+import android.content.SharedPreferences;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,7 +28,7 @@ import it.unibo.deis.lia.ramp.core.internode.OpportunisticNetworkingManager.Repl
  *
  * @author Stefano Lanzone
  */
-public class OpportunisticNetworkingManagerActivity extends Activity  implements OnClickListener, OnCheckedChangeListener {
+public class OpportunisticNetworkingManagerActivity extends AppCompatActivity implements OnClickListener, OnCheckedChangeListener {
 
     private OpportunisticNetworkingManager onm = null;
 
@@ -75,10 +76,10 @@ public class OpportunisticNetworkingManagerActivity extends Activity  implements
     public void onClick(View view) {
         checkRampState();
 
-        if( view.getId() == R.id.backToManager){
+        if( view.getId() == R.id.backToManager) {
         	onBackPressed();
         }
-        else if( onm==null ){
+        else if( onm==null ) {
             Util.showShortToast(this, "Activate Continuity Manager via the RAMP Manager!");
         }
         else{
@@ -87,10 +88,10 @@ public class OpportunisticNetworkingManagerActivity extends Activity  implements
     }
 
 	private void checkRampState() {
-		if( RampEntryPoint.isActive() && onm==null ){
+		if( RampEntryPoint.isActive() && onm==null ) {
         	onm = OpportunisticNetworkingManager.getInstance(true);
         }
-        else if( !RampEntryPoint.isActive() && onm!=null ){
+        else if( !RampEntryPoint.isActive() && onm!=null ) {
         	onm.deactivate(true);
         	onm = null;
         }
@@ -189,10 +190,9 @@ public class OpportunisticNetworkingManagerActivity extends Activity  implements
 //		Util.saveRemoteServices(editor, services);
 
 		// Commit
-		editor.commit();
+		editor.apply();
 		
-		if(onm != null)
-		{
+		if(onm != null) {
 			onm.setSendPacketsPeriod(sendPacketsPeriod);
 			onm.setExpirationTimeManagedPackets(expirationTimeManagedPackets);
 			onm.setPersistPackets(persistPackets);
@@ -228,8 +228,7 @@ public class OpportunisticNetworkingManagerActivity extends Activity  implements
 		int packetSizeThresholdHigher = 100;
 		int packetSizeThresholdLower = 50;
 		ReplacePackets rp = ReplacePackets.OLD;
-		if(onm != null)
-		{
+		if(onm != null) {
 			persistPackets = onm.isPersistPackets();
 			removePacketAfterSend = onm.isRemovePacketAfterSend();
 		    sendPacketsPeriod = onm.getSendPacketsPeriod();

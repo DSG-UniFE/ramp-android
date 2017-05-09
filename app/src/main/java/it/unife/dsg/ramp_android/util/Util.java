@@ -8,16 +8,17 @@ import java.util.Vector;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Environment;
 import android.text.TextUtils;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 public class Util {
-	
-	
+
+
 	// Save and restore discovered remote services
-	
+
 	public static void saveRemoteServices(SharedPreferences.Editor editor, List<ServiceResponse> services) {
 		if(services != null && services.size() > 0){
 			editor.putInt("servicesSize", services.size());
@@ -99,5 +100,24 @@ public class Util {
     public static void showLongToast(Context context, String message) {
     	Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
-	
+
+    /* Checks if external storage is available for read and write */
+    public static boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
+    /* Checks if external storage is available to at least read */
+    public static boolean isExternalStorageReadable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state) ||
+                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
 }

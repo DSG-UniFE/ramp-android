@@ -82,4 +82,5 @@
     <string name="esmn_name">ESMN Name:</string>
     <string name="esmn_manager_ip">ESMN Manager IP:</string>
     <string name="ramp_active_notification">1</string>
+    <string name="wifiopp_notification">2</string>
 </resources>
