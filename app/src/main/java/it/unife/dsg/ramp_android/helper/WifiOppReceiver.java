@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
 import it.unife.dsg.ramp_android.R;
 import it.unife.dsg.ramp_android.RampManagerActivity;

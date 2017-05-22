@@ -26,6 +26,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 //import android.widget.ImageView;
 //import android.widget.LinearLayout;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,13 +34,21 @@ import android.widget.Toast;
 //import com.facebook.android.*;
 //import com.facebook.android.Facebook.*;
 
+import java.net.InetAddress;
+import java.util.Vector;
+
 import it.unibo.deis.lia.ramp.RampEntryPoint;
 //import it.unibo.deis.lia.ramp.core.ern.SecureJoinEntrypoint;
 //import it.unibo.deis.lia.ramp.core.social.SocialObserver;
 //import it.unibo.deis.lia.ramp.core.social.SocialObserverFacebook;
 //import it.unibo.deis.lia.ramp.service.upnp.UpnpProxyEntrypoint;
+import it.unibo.deis.lia.ramp.core.e2e.GenericPacket;
+import it.unibo.deis.lia.ramp.core.internode.Heartbeater;
+import it.unibo.deis.lia.ramp.core.internode.Resolver;
+import it.unibo.deis.lia.ramp.core.internode.ResolverPath;
 import it.unife.dsg.ramp_android.util.Util;
 
+import it.unibo.deis.lia.ramp.core.e2e.E2EComm;
 
 /**
  *
@@ -123,6 +132,7 @@ public class RampManagerActivity extends AppCompatActivity implements OnClickLis
 //        findViewById(R.id.loginWithFacebookButton).setOnClickListener(this);
 //        findViewById(R.id.logoutFacebook).setOnClickListener(this);
         findViewById(R.id.opportunisticNetworkingManagerButton).setOnClickListener(this);
+        findViewById(R.id.sendMessageBench).setOnClickListener(this);
         
         ((TextView)findViewById(R.id.buildTime)).setText("build time = " + RampEntryPoint.releaseDate);
         
@@ -226,6 +236,41 @@ public class RampManagerActivity extends AppCompatActivity implements OnClickLis
                     }
         		}
             	break;
+
+            case R.id.sendMessageBench:
+                System.out.println("RAMPManagerActivity: onClick = R.id.sendMessageBench");
+
+                if (RampEntryPoint.isActive()) {
+                    System.out.println("RAMPManagerActivity: onClick = R.id.sendMessageBench TRUE");
+                    String ip = ((EditText) findViewById(R.id.ipBench)).getText().toString();
+                    try {
+                        int port =  Integer.parseInt(((EditText) findViewById(R.id.portBench)).getText().toString());
+                        Integer nodeId = Heartbeater.getInstance(true).getNodeId(InetAddress.getByName(ip));
+                        if (nodeId != null) {
+                            Vector<ResolverPath> paths = Resolver.getInstance(true).resolveBlocking(nodeId, 5*1000);
+                            E2EComm.sendUnicast(paths.firstElement().getPath(),
+                                    nodeId,
+                                    port,
+                                    E2EComm.TCP,
+                                    false,
+                                    GenericPacket.UNUSED_FIELD,
+                                    E2EComm.DEFAULT_BUFFERSIZE,
+                                    5, // timeWait
+                                    60, // expiry
+                                    GenericPacket.UNUSED_FIELD,
+                                    E2EComm.serialize("")
+                            );
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    System.out.println("RAMPManagerActivity: onClick = R.id.sendMessageBench FALSE");
+                    Toast.makeText(getApplicationContext(), "Before send message you have to " +
+                            "activate RAMP!", Toast.LENGTH_LONG).show();
+                }
+
+                break;
             /*case R.id.connectToEsmn:
             	
 			     LayoutInflater factory = LayoutInflater.from(this);
