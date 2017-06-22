@@ -14,34 +14,34 @@ import it.unife.dsg.ramp_android.R;
 import it.unife.dsg.ramp_android.RampManagerActivity;
 import it.unife.dsg.ramp_android.util.Constants;
 
-public class WifiOppReceiver extends BroadcastReceiver {
+public class LCCReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        System.out.println("WifiOppReceiver:  onReceive");
+        System.out.println("LCCReceiver:  onReceive");
         System.out.println("Intent Action:" + intent.getAction());
 
-        if (intent.getAction().equals(Constants.WIFIOPP_INTENT_ACTION)) {
+        if (intent.getAction().equals(Constants.LCC_INTENT_ACTION)) {
             Bundle extras = intent.getExtras();
             if (extras != null) {
 //                    for (String key : extras.keySet()) {
 //                        System.out.println("Intent Extra key=" + key + ":" + extras.get(key));
 //                        showNotification(context, "Pippo", "Pluto");
 //                    }
-                System.out.println("WifiOppReceiver >>> " + extras.getInt("data"));
+                System.out.println("LCCReceiver >>> " + extras.getInt("data"));
                 switch (extras.getInt("data")) {
-                    case Constants.MESSAGE_WIFIOPP_DEACTIVATE:
+                    case Constants.MESSAGE_LCC_DEACTIVATE:
                         break;
-                    case Constants.MESSAGE_WIFIOPP_ACTIVATE:
+                    case Constants.MESSAGE_LCC_ACTIVATE:
                         break;
                     case Constants.MESSAGE_ROLE_CHANGED:
                         sendLocalBroadcast(context, Constants.MESSAGE_ROLE_CHANGED);
-                        System.out.println("WifiOppReceiver sent message " +
+                        System.out.println("LCCReceiver sent message " +
                                 Constants.MESSAGE_ROLE_CHANGED);
                         break;
                     case Constants.MESSAGE_HOTSPOT_CHANGED:
                         sendLocalBroadcast(context, Constants.MESSAGE_HOTSPOT_CHANGED);
-                        System.out.println("WifiOppReceiver sent message " +
+                        System.out.println("LCCReceiver sent message " +
                                 Constants.MESSAGE_HOTSPOT_CHANGED);
                         break;
                 }

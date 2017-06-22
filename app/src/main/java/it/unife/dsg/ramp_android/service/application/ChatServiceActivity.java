@@ -2,6 +2,7 @@
 package it.unife.dsg.ramp_android.service.application;
 
 import java.io.ByteArrayOutputStream;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -370,8 +371,10 @@ public class ChatServiceActivity extends AppCompatActivity implements
                 		Util.showShortToast(this, "Bx message not sent!");
                 	else
                 	{
-                		Date date=new Date(System.currentTimeMillis());
-                		String messageBoard = date.toLocaleString() +": "+message;
+                		Date date = new Date(System.currentTimeMillis());
+                        DateFormat format = DateFormat.getDateInstance();
+                		String messageBoard = format.format(date) + ": " + message;
+
                 		String lastMessages = bxMessageSent.getText().toString();
                 		if(!lastMessages.equals(""))
                 			lastMessages = lastMessages + "\n";

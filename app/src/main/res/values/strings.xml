@@ -84,7 +84,7 @@
     <string name="send_message">Send message</string>
     <string name="ip">IP</string>
     <string name="ramp_active_notification">1</string>
-    <string name="wifiopp_notification">2</string>
+    <string name="LCC_notification">2</string>
     <string name="port">Port</string>
     <string name="_30">30</string>
 </resources>
