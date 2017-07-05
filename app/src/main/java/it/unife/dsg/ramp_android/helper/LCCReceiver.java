@@ -32,13 +32,16 @@ public class LCCReceiver extends BroadcastReceiver {
                 switch (extras.getInt("data")) {
                     case Constants.MESSAGE_LCC_DEACTIVATE:
                         break;
+
                     case Constants.MESSAGE_LCC_ACTIVATE:
                         break;
+
                     case Constants.MESSAGE_ROLE_CHANGED:
                         sendLocalBroadcast(context, Constants.MESSAGE_ROLE_CHANGED);
                         System.out.println("LCCReceiver sent message " +
                                 Constants.MESSAGE_ROLE_CHANGED);
                         break;
+
                     case Constants.MESSAGE_HOTSPOT_CHANGED:
                         sendLocalBroadcast(context, Constants.MESSAGE_HOTSPOT_CHANGED);
                         System.out.println("LCCReceiver sent message " +
@@ -71,8 +74,10 @@ public class LCCReceiver extends BroadcastReceiver {
         notificationManager.notify(13, notificationBuilder.build());
     }
 
-    // Send an Intent with an action named "intent_type". The Intent sent should
-    // be received by the Receiver.
+    /**
+     * Send an Intent with an action named "intent_type". The Intent sent should
+     * be received by the Receiver.
+     */
     private void sendLocalBroadcast(Context context, int message_id) {
         Intent intent = new Intent(Constants.RAMP_INTENT_ACTION);
         intent.putExtra("data", message_id);

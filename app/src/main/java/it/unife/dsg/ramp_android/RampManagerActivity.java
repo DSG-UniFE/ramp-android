@@ -66,7 +66,8 @@ public class RampManagerActivity extends AppCompatActivity implements OnClickLis
     
     private ServiceConnection sc = new ServiceConnection() {
         public void onServiceConnected(ComponentName name, IBinder service) {
-            System.out.println("RampManagerActivity: onServiceConnected");
+            System.out.println("RampManagerActivity: onServiceConnected()");
+            String text = null;
 
             ramp = ((RampLocalService.RAMPAndroidServiceBinder) service).getRampEntryPoint();
             ((CheckBox) findViewById(R.id.rampActive)).setChecked(true);
@@ -77,11 +78,11 @@ public class RampManagerActivity extends AppCompatActivity implements OnClickLis
             uiHandler = new UIHandler(uiThread.getLooper(), getApplicationContext());
             RampEntryPoint.setAndroidUIHandler(uiHandler);
 
-            String nodeId = ramp.getNodeIdString();
-            ((TextView)findViewById(R.id.nodeId)).setText("node ID = " + nodeId);
+            text = getString(R.string.node_id) + ramp.getNodeIdString();
+            ((TextView)findViewById(R.id.nodeId)).setText(text);
 
             String[] neighbors = ramp.getCurrentNeighbors();
-            String text = "Neighbors:\n";
+            text = "Neighbors:\n";
             for(int i=0; i<neighbors.length; i++){
                 text += neighbors[i];
                 if(i<neighbors.length-1){
@@ -93,7 +94,7 @@ public class RampManagerActivity extends AppCompatActivity implements OnClickLis
         }
         
         public void onServiceDisconnected(ComponentName arg0) {
-            System.out.println("RampManagerActivity: onServiceDisconnected");
+            System.out.println("RampManagerActivity: onServiceDisconnected()");
             ramp = null;
             ((CheckBox) findViewById(R.id.rampActive)).setChecked(false);
         }
@@ -106,22 +107,24 @@ public class RampManagerActivity extends AppCompatActivity implements OnClickLis
     }
 
 
-    /** Called when the activity is first created. */
+    /**
+     * Called when the activity is first created.
+     */
     @Override
     public void onCreate(Bundle icicle) {
-        System.out.println("RAMPManagerActivity: onCreate");
+        System.out.println("RAMPManagerActivity: onCreate()");
         super.onCreate(icicle);
         managerActivity = RampManagerActivity.this;
         setContentView(R.layout.ramp_manager);
 
-        Spinner spinnerServices = (Spinner)findViewById(R.id.serviceSpinner);
-        System.out.println("RAMPManagerActivity: spinnerServices = "+spinnerServices);
-        String[] services = new String[] { "FileSharingService","ChatService" };
+        Spinner spinnerServices = (Spinner) findViewById(R.id.serviceSpinner);
+        System.out.println("RAMPManagerActivity: spinnerServices = " + spinnerServices);
+        String[] services = new String[]{"FileSharingService", "ChatService"};
         Util.populateSpinner(this, spinnerServices, services);
 
-        Spinner spinnerClients = (Spinner)findViewById(R.id.clientSpinner);
-        System.out.println("RAMPManagerActivity: spinnerClients = "+spinnerClients);
-        String[] clients = new String[] { "FileSharingClient", "BroadcastClient" };
+        Spinner spinnerClients = (Spinner) findViewById(R.id.clientSpinner);
+        System.out.println("RAMPManagerActivity: spinnerClients = " + spinnerClients);
+        String[] clients = new String[]{"FileSharingClient", "BroadcastClient"};
         Util.populateSpinner(this, spinnerClients, clients);
 
         findViewById(R.id.goToClient).setOnClickListener(this);
@@ -133,19 +136,19 @@ public class RampManagerActivity extends AppCompatActivity implements OnClickLis
 //        findViewById(R.id.logoutFacebook).setOnClickListener(this);
         findViewById(R.id.opportunisticNetworkingManagerButton).setOnClickListener(this);
         findViewById(R.id.sendMessageBench).setOnClickListener(this);
-        
-        ((TextView)findViewById(R.id.buildTime)).setText("build time = " + RampEntryPoint.releaseDate);
-        
-        CheckBox rampActive = (CheckBox)findViewById(R.id.rampActive);
+
+        ((TextView) findViewById(R.id.buildTime)).setText("build time = " + RampEntryPoint.releaseDate);
+
+        CheckBox rampActive = (CheckBox) findViewById(R.id.rampActive);
         rampActive.setOnCheckedChangeListener(this);
-        
+
 //        CheckBox upnpActive = (CheckBox)findViewById(R.id.upnpActive);
 //        upnpActive.setOnCheckedChangeListener(this);
 //        CheckBox socialConnect = (CheckBox)findViewById(R.id.socialConnect);
 //        socialConnect.setOnCheckedChangeListener(this);
-        
+
         //Stefano Lanzone
-        CheckBox cmConnect = (CheckBox)findViewById(R.id.cmConnect);
+        CheckBox cmConnect = (CheckBox) findViewById(R.id.cmConnect);
         cmConnect.setOnCheckedChangeListener(this);
 
         // hide soft keyboard at activity start-up
@@ -389,7 +392,7 @@ public class RampManagerActivity extends AppCompatActivity implements OnClickLis
     
     @Override
     public void onBackPressed() {
-        System.out.println("RAMPManagerActivity: onBackPressed");
+        System.out.println("RAMPManagerActivity: onBackPressed()");
         // go back to the phone home display
         Intent i = new Intent();
         i.setAction(Intent.ACTION_MAIN);
@@ -399,52 +402,50 @@ public class RampManagerActivity extends AppCompatActivity implements OnClickLis
 
     @Override
     protected void onDestroy() {
-        System.out.println("RAMPManagerActivity: onDestroy");
+        System.out.println("RAMPManagerActivity: onDestroy()");
         super.onDestroy();
     }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-    	final int id = buttonView.getId();
-        switch(id){
+        final int id = buttonView.getId();
+        switch (id) {
             case R.id.rampActive:
                 System.out.println("RAMPManagerActivity: onCheckedChanged = R.id.rampActive " + isChecked);
-                if(isChecked){
-                	if(ramp == null) {
-                		Intent serviceIntent = new Intent(this, RampLocalService.class);
-                		startService(serviceIntent);
-                		bindService(serviceIntent, sc, Context.BIND_AUTO_CREATE);
-                	}
-                }
-                else{
-                    if( ramp != null ){
-                    	//stop upnp
+                if (isChecked) {
+                    if (ramp == null) {
+                        Intent serviceIntent = new Intent(this, RampLocalService.class);
+                        startService(serviceIntent);
+                        bindService(serviceIntent, sc, Context.BIND_AUTO_CREATE);
+                    }
+                } else {
+                    if (ramp != null) {
+                        //stop upnp
 //                        CheckBox upnpActive = (CheckBox)findViewById(R.id.upnpActive);
 //                        upnpActive.setChecked(false);
-                        
+
                         // stop social connect
 //                        CheckBox socialConnect = (CheckBox)findViewById(R.id.socialConnect);
 //                        socialConnect.setChecked(false);
-                        
+
                         // stop continuity manager
-                        CheckBox cmConnect = (CheckBox)findViewById(R.id.cmConnect);
+                        CheckBox cmConnect = (CheckBox) findViewById(R.id.cmConnect);
                         cmConnect.setChecked(false);
-                    	
+
                         // stop RampLocalService
                         unbindService(sc);
-                        Intent serviceIntent = new Intent(
-                            RampManagerActivity.this,
-                            RampLocalService.class
-                        );
+                        Intent serviceIntent = new Intent(RampManagerActivity.this,
+                                RampLocalService.class);
                         stopService(serviceIntent);
-                        
+
                         // restore facebook login button
 //                        showFacebookLoginButton();
-                        
+
                         ramp = null;
                     }
                 }
                 break;
+
 //            case R.id.upnpActive:
 //            	System.out.println("RAMPManagerActivity: onCheckedChanged = R.id.uPnPActive "+isChecked);
 //            	if(isChecked){
@@ -461,49 +462,48 @@ public class RampManagerActivity extends AppCompatActivity implements OnClickLis
 //            		ramp.stopUpnpProxyEntrypoint();
 //            	}
 //            	break;
-        	case R.id.cmConnect:
-        		System.out.println("RAMPManagerActivity: onCheckedChanged = R.id.cmConnect");
-        		if(isChecked){
-            		if( ! RampEntryPoint.isActive() ){
-            			Util.showShortToast(this, "Activate RAMP!");
-                        CheckBox cmConnect = (CheckBox)findViewById(R.id.cmConnect);
+
+            case R.id.cmConnect:
+                System.out.println("RAMPManagerActivity: onCheckedChanged = R.id.cmConnect");
+                if (isChecked) {
+                    if (!RampEntryPoint.isActive()) {
+                        Util.showShortToast(this, "Activate RAMP!");
+                        CheckBox cmConnect = (CheckBox) findViewById(R.id.cmConnect);
                         cmConnect.setChecked(false);
-                    }
-            		else{
+                    } else {
 //            			ramp.startSecureJoinEntrypoint(null); // can be null on android (never use username and pass)
 //    					ramp.startSocialObserver(null, null); // as above
 //            			socialObserverFacebook = SocialObserver.getInstance().getSocialObserverFacebook();
 //            			checkFacebookTokenAsync();
 //            			showFacebookInfo("Fetching Facebook information...", null, null);
-            			
-            			ramp.startContinuityManager(); //Stefano Lanzone
-            		}
-            	}
-        		else{
+
+                        ramp.startContinuityManager(); //Stefano Lanzone
+                    }
+                } else {
 //        			ramp.stopSecureJoinEntrypoint();
 //        			ramp.stopSocialObserver();
-        			
-        			ramp.stopContinuityManager(); //Stefano Lanzone
-        		}
+
+                    ramp.stopContinuityManager(); //Stefano Lanzone
+                }
                 break;
         }
     }
 
     @Override
     protected void onPause() {
-        System.out.println("RAMPManagerActivity: onPause");
+        System.out.println("RAMPManagerActivity: onPause()");
         super.onPause();
     }
 
     @Override
     protected void onRestart() {
-        System.out.println("RAMPManagerActivity: onRestart");
+        System.out.println("RAMPManagerActivity: onRestart()");
         super.onRestart();
     }
 
     @Override
     protected void onResume() {
-        System.out.println("RAMPManagerActivity: onResume");
+        System.out.println("RAMPManagerActivity: onResume()");
         super.onResume();
         
 //        CheckBox upnpActive = (CheckBox)findViewById(R.id.upnpActive);
@@ -516,7 +516,7 @@ public class RampManagerActivity extends AppCompatActivity implements OnClickLis
 
     @Override
     protected void onStart() {
-        System.out.println("RAMPManagerActivity: onStart");
+        System.out.println("RAMPManagerActivity: onStart()");
         super.onStart();
         
         if( RampEntryPoint.isActive() ) {
@@ -526,7 +526,7 @@ public class RampManagerActivity extends AppCompatActivity implements OnClickLis
 
     @Override
     protected void onStop() {
-        System.out.println("RAMPManagerActivity: onStop");
+        System.out.println("RAMPManagerActivity: onStop()");
         super.onStop();
         if(ramp != null) {
         	unbindService(sc);

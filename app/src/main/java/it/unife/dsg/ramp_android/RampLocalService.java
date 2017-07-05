@@ -28,6 +28,7 @@ import it.unife.dsg.ramp_android.util.Constants;
 public class RampLocalService extends Service {
 
     private static RampEntryPoint ramp = null;
+    private static String TAG = "RampLocalServiceReceive";
 
     // Unique Identification Number for the Notification.
     // We use it on Notification start, and to cancel it.
@@ -45,15 +46,15 @@ public class RampLocalService extends Service {
 
     // Our handler for received Intents. This will be called whenever an Intent
     // with an action named "Constants.RAMP_INTENT_ACTION" is broadcasted.
-    private BroadcastReceiver RampLocalServiceReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            System.out.println("RampLocalServiceReceiver:  onReceive");
-            System.out.println("Intent Action:" + intent.getAction());
+            System.out.println("RampLocalService, broadcastReceiver:  onReceive");
+            System.out.println("RampLocalService, intent Action:" + intent.getAction());
             if (intent.getAction().equals(Constants.RAMP_INTENT_ACTION)) {
                 // Get extra data included in the Intent
                 int value = intent.getIntExtra("data", -1);
-                Log.d("RampLocalServiceReceive", "Got message: " + value);
+                Log.d(TAG, "broadcastReceiver, got message: " + value);
                 if (value > 0)
                     ramp.sentNotifyToOpportunisticNetworkingManager();
             }
@@ -62,7 +63,7 @@ public class RampLocalService extends Service {
 
     @Override
     public void onCreate() {
-        System.out.println("RampLocalService: onCreate");
+        System.out.println("RampLocalService: onCreate()");
         super.onCreate();
 
         // credits: http://stackoverflow.com/questions/6343166/android-os-networkonmainthreadexception
@@ -96,38 +97,38 @@ public class RampLocalService extends Service {
         // Register to receive messages.
         // We are registering an observer (mMessageReceiver) to receive Intents
         // with actions named "Constants.RAMP_INTENT_ACTION".
-        LocalBroadcastManager.getInstance(this).registerReceiver(RampLocalServiceReceiver,
+        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,
                 new IntentFilter(Constants.RAMP_INTENT_ACTION));
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        System.out.println("RampLocalService: onStartCommand");
+        System.out.println("RampLocalService: onStartCommand()");
         //super.onStart(intent, startId);
         return START_STICKY;
     }
 
     @Override
     public void onDestroy() {
-        System.out.println("RampLocalService: onDestroy");
+        System.out.println("RampLocalService: onDestroy()");
         super.onDestroy();
         
         ramp.stopRamp();
         ramp = null;
 
         // Unregister since the activity is about to be closed.
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(RampLocalServiceReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
     }
 
     @Override
     public IBinder onBind(Intent arg0) {
-        System.out.println("RampLocalService: onBind");
+        System.out.println("RampLocalService: onBind()");
         return serviceBinder;
     }
 
     @Override
     public void onRebind(Intent intent) {
-        System.out.println("RampLocalService: onRebind");
+        System.out.println("RampLocalService: onRebind()");
         super.onRebind(intent);
     }
 
@@ -139,7 +140,7 @@ public class RampLocalService extends Service {
 
     @Override
     public boolean onUnbind(Intent intent) {
-        System.out.println("RampLocalService: onUnbind");
+        System.out.println("RampLocalService: onUnbind()");
         return super.onUnbind(intent);
     }
 
