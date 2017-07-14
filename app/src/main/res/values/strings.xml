@@ -82,7 +82,7 @@
     <string name="esmn_name">ESMN Name:</string>
     <string name="esmn_manager_ip">ESMN Manager IP:</string>
     <string name="send_message">Send message</string>
-    <string name="ip">IP</string>
+    <string name="id">Node ID</string>
     <string name="ramp_active_notification">1</string>
     <string name="LCC_notification">2</string>
     <string name="port">Port</string>

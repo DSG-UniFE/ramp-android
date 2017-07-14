@@ -62,7 +62,6 @@ public class RampManagerActivity extends AppCompatActivity implements OnClickLis
 
 //    private Facebook facebook;
 //    private SocialObserverFacebook socialObserverFacebook;
-
     
     private ServiceConnection sc = new ServiceConnection() {
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -78,7 +77,7 @@ public class RampManagerActivity extends AppCompatActivity implements OnClickLis
             uiHandler = new UIHandler(uiThread.getLooper(), getApplicationContext());
             RampEntryPoint.setAndroidUIHandler(uiHandler);
 
-            text = getString(R.string.node_id) + ramp.getNodeIdString();
+            text = getString(R.string.node_id) + " " + ramp.getNodeIdString();
             ((TextView)findViewById(R.id.nodeId)).setText(text);
 
             String[] neighbors = ramp.getCurrentNeighbors();
@@ -118,20 +117,18 @@ public class RampManagerActivity extends AppCompatActivity implements OnClickLis
         setContentView(R.layout.ramp_manager);
 
         Spinner spinnerServices = (Spinner) findViewById(R.id.serviceSpinner);
-        System.out.println("RAMPManagerActivity: spinnerServices = " + spinnerServices);
         String[] services = new String[]{"FileSharingService", "ChatService"};
         Util.populateSpinner(this, spinnerServices, services);
 
         Spinner spinnerClients = (Spinner) findViewById(R.id.clientSpinner);
-        System.out.println("RAMPManagerActivity: spinnerClients = " + spinnerClients);
         String[] clients = new String[]{"FileSharingClient", "BroadcastClient"};
         Util.populateSpinner(this, spinnerClients, clients);
 
         findViewById(R.id.goToClient).setOnClickListener(this);
         findViewById(R.id.goToService).setOnClickListener(this);
         findViewById(R.id.refreshNeighbors).setOnClickListener(this);
-        //findViewById(R.id.setNodeId).setOnClickListener(this);
-        //findViewById(R.id.connectToEsmn).setOnClickListener(this);
+//        findViewById(R.id.setNodeId).setOnClickListener(this);
+//        findViewById(R.id.connectToEsmn).setOnClickListener(this);
 //        findViewById(R.id.loginWithFacebookButton).setOnClickListener(this);
 //        findViewById(R.id.logoutFacebook).setOnClickListener(this);
         findViewById(R.id.opportunisticNetworkingManagerButton).setOnClickListener(this);
@@ -245,25 +242,22 @@ public class RampManagerActivity extends AppCompatActivity implements OnClickLis
 
                 if (RampEntryPoint.isActive()) {
                     System.out.println("RAMPManagerActivity: onClick = R.id.sendMessageBench TRUE");
-                    String ip = ((EditText) findViewById(R.id.ipBench)).getText().toString();
                     try {
+                        Integer nodeId = Integer.parseInt(((EditText) findViewById(R.id.idBench)).getText().toString());
                         int port =  Integer.parseInt(((EditText) findViewById(R.id.portBench)).getText().toString());
-                        Integer nodeId = Heartbeater.getInstance(true).getNodeId(InetAddress.getByName(ip));
-                        if (nodeId != null) {
-                            Vector<ResolverPath> paths = Resolver.getInstance(true).resolveBlocking(nodeId, 5*1000);
-                            E2EComm.sendUnicast(paths.firstElement().getPath(),
-                                    nodeId,
-                                    port,
-                                    E2EComm.TCP,
-                                    false,
-                                    GenericPacket.UNUSED_FIELD,
-                                    E2EComm.DEFAULT_BUFFERSIZE,
-                                    5, // timeWait
-                                    60, // expiry
-                                    GenericPacket.UNUSED_FIELD,
-                                    E2EComm.serialize("")
-                            );
-                        }
+                        Vector<ResolverPath> paths = Resolver.getInstance(true).resolveBlocking(nodeId, 5*1000);
+                        E2EComm.sendUnicast(paths.firstElement().getPath(),
+                                nodeId,
+                                port,
+                                E2EComm.TCP,
+                                false,
+                                GenericPacket.UNUSED_FIELD,
+                                E2EComm.DEFAULT_BUFFERSIZE,
+                                5, // timeWait
+                                60, // expiry
+                                GenericPacket.UNUSED_FIELD,
+                                E2EComm.serialize("")
+                        );
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

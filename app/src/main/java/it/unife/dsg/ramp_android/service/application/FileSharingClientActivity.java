@@ -111,8 +111,12 @@ public class FileSharingClientActivity extends AppCompatActivity implements OnCl
                     break;
                 case R.id.getRemoteFileList:
                     System.out.println("FileSharingClientActivity: onClick = R.id.getRemoteFileList");
-                    Spinner servicesSpinner = (Spinner)findViewById(R.id.remoteServices);
                     try {
+                        Spinner servicesSpinner = (Spinner)findViewById(R.id.remoteServices);
+
+                        System.out.println("FileSharingClientActivity,  servicesSpinner: " + servicesSpinner);
+
+
                         if( services!=null && services.size()>0 ){
                             String[] remoteFiles = fsc.getRemoteFileList(services.elementAt(servicesSpinner.getSelectedItemPosition()));
                             Spinner remoteFilesSpinner = (Spinner)findViewById(R.id.remoteFilesSpinner);
