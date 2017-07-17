@@ -1,5 +1,5 @@
 
-package it.unife.dsg.ramp_android;
+package it.unife.dsg.ramp_android.helper;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -18,6 +18,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import it.unibo.deis.lia.ramp.RampEntryPoint;
+import it.unife.dsg.ramp_android.R;
+import it.unife.dsg.ramp_android.RampManagerActivity;
 import it.unife.dsg.ramp_android.util.Constants;
 
 
@@ -28,7 +30,7 @@ import it.unife.dsg.ramp_android.util.Constants;
 public class RampLocalService extends Service {
 
     private static RampEntryPoint ramp = null;
-    private static String TAG = "RampLocalServiceReceive";
+    private static String TAG = "RampLocalService";
 
     // Unique Identification Number for the Notification.
     // We use it on Notification start, and to cancel it.

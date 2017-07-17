@@ -34,7 +34,6 @@ import android.widget.Toast;
 //import com.facebook.android.*;
 //import com.facebook.android.Facebook.*;
 
-import java.net.InetAddress;
 import java.util.Vector;
 
 import it.unibo.deis.lia.ramp.RampEntryPoint;
@@ -43,9 +42,9 @@ import it.unibo.deis.lia.ramp.RampEntryPoint;
 //import it.unibo.deis.lia.ramp.core.social.SocialObserverFacebook;
 //import it.unibo.deis.lia.ramp.service.upnp.UpnpProxyEntrypoint;
 import it.unibo.deis.lia.ramp.core.e2e.GenericPacket;
-import it.unibo.deis.lia.ramp.core.internode.Heartbeater;
 import it.unibo.deis.lia.ramp.core.internode.Resolver;
 import it.unibo.deis.lia.ramp.core.internode.ResolverPath;
+import it.unife.dsg.ramp_android.helper.RampLocalService;
 import it.unife.dsg.ramp_android.util.Util;
 
 import it.unibo.deis.lia.ramp.core.e2e.E2EComm;
@@ -426,6 +425,9 @@ public class RampManagerActivity extends AppCompatActivity implements OnClickLis
                         CheckBox cmConnect = (CheckBox) findViewById(R.id.cmConnect);
                         cmConnect.setChecked(false);
 
+                        // Stop RAMP
+                        ramp.stopRamp();
+
                         // stop RampLocalService
                         unbindService(sc);
                         Intent serviceIntent = new Intent(RampManagerActivity.this,
@@ -513,7 +515,7 @@ public class RampManagerActivity extends AppCompatActivity implements OnClickLis
         System.out.println("RAMPManagerActivity: onStart()");
         super.onStart();
         
-        if( RampEntryPoint.isActive() ) {
+        if (RampEntryPoint.isActive()) {
         	bindService(new Intent(this, RampLocalService.class), sc, Context.BIND_AUTO_CREATE);
         }
     }
@@ -522,7 +524,7 @@ public class RampManagerActivity extends AppCompatActivity implements OnClickLis
     protected void onStop() {
         System.out.println("RAMPManagerActivity: onStop()");
         super.onStop();
-        if(ramp != null) {
+        if (ramp != null) {
         	unbindService(sc);
         }
     }

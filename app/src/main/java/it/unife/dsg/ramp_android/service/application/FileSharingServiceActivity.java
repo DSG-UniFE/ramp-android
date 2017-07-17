@@ -22,7 +22,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import it.unibo.deis.lia.ramp.RampEntryPoint;
 import it.unife.dsg.ramp_android.R;
-import it.unife.dsg.ramp_android.RampLocalService;
+import it.unife.dsg.ramp_android.helper.RampLocalService;
 import it.unife.dsg.ramp_android.util.Util;
 import it.unibo.deis.lia.ramp.service.application.FileSharingService;
 
@@ -38,13 +38,13 @@ public class FileSharingServiceActivity extends AppCompatActivity implements
 	private ServiceConnection sc = new ServiceConnection() {
 		@Override
 		public void onServiceConnected(ComponentName name, IBinder service) {
-			System.out.println("FileSharingServiceActivity: onServiceConnected");
+			System.out.println("FileSharingServiceActivity: onServiceConnected()");
 			ramp = ((RampLocalService.RAMPAndroidServiceBinder) service).getRampEntryPoint();
 		}
 
 		@Override
 		public void onServiceDisconnected(ComponentName name) {
-			System.out.println("FileSharingServiceActivity: onServiceDisconnected");
+			System.out.println("FileSharingServiceActivity: onServiceDisconnected()");
 			ramp = null;
 		}
 	};
@@ -63,9 +63,10 @@ public class FileSharingServiceActivity extends AppCompatActivity implements
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle icicle) {
-        System.out.println("FileSharingServiceActivity: onCreate");
-		filesharingServiceInstance = FileSharingServiceActivity.this;
+        System.out.println("FileSharingServiceActivity: onCreate()");
         super.onCreate(icicle);
+
+        filesharingServiceInstance = FileSharingServiceActivity.this;
 
         setContentView(R.layout.file_sharing_service);
 
@@ -77,14 +78,20 @@ public class FileSharingServiceActivity extends AppCompatActivity implements
     
     @Override
     public void onStart() {
-    	super.onStart();
-    	bindService(new Intent(this, RampLocalService.class), sc, Context.BIND_AUTO_CREATE);
+        System.out.println("FileSharingServiceActivity: onStart()");
+        super.onStart();
+        if (RampEntryPoint.isActive()) {
+            bindService(new Intent(this, RampLocalService.class), sc, Context.BIND_AUTO_CREATE);
+        }
     }
     
     @Override
     public void onStop() {
+        System.out.println("FileSharingServiceActivity: onStop()");
     	super.onStop();
-    	unbindService(sc);
+        if (ramp != null) {
+            unbindService(sc);
+        }
     }
 
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -92,10 +99,12 @@ public class FileSharingServiceActivity extends AppCompatActivity implements
             case R.id.fileSharingServiceActive:
                 System.out.println("FileSharingServiceActivity: onCheckedChanged = " +
                         "R.id.fileSharingServiceActive " + isChecked);
-                if( isChecked && !FileSharingService.isActive() ){
+                System.out.println("FileSharingServiceActivity: FileSharingService.isActive() = " +
+                        FileSharingService.isActive());
+                if (isChecked && !FileSharingService.isActive()) {
                     System.out.println("FileSharingServiceActivity: onCheckedChanged = " +
                             "activating...");
-                    if( ramp != null ){
+                    if (ramp != null) {
                     	ramp.startService("FileSharingService");
                     }
                     else{
