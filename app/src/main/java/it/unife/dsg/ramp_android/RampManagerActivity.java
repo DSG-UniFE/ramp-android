@@ -44,6 +44,7 @@ import it.unibo.deis.lia.ramp.RampEntryPoint;
 import it.unibo.deis.lia.ramp.core.e2e.GenericPacket;
 import it.unibo.deis.lia.ramp.core.internode.Resolver;
 import it.unibo.deis.lia.ramp.core.internode.ResolverPath;
+import it.unibo.deis.lia.ramp.util.Benchmark;
 import it.unife.dsg.ramp_android.helper.RampLocalService;
 import it.unife.dsg.ramp_android.util.Util;
 
@@ -240,28 +241,66 @@ public class RampManagerActivity extends AppCompatActivity implements OnClickLis
                 System.out.println("RAMPManagerActivity: onClick = R.id.sendMessageBench");
 
                 if (RampEntryPoint.isActive()) {
-                    System.out.println("RAMPManagerActivity: onClick = R.id.sendMessageBench TRUE");
                     try {
-                        Integer nodeId = Integer.parseInt(((EditText) findViewById(R.id.idBench)).getText().toString());
-                        int port =  Integer.parseInt(((EditText) findViewById(R.id.portBench)).getText().toString());
-                        Vector<ResolverPath> paths = Resolver.getInstance(true).resolveBlocking(nodeId, 5*1000);
-                        E2EComm.sendUnicast(paths.firstElement().getPath(),
-                                nodeId,
-                                port,
-                                E2EComm.TCP,
-                                false,
-                                GenericPacket.UNUSED_FIELD,
-                                E2EComm.DEFAULT_BUFFERSIZE,
-                                5, // timeWait
-                                60, // expiry
-                                GenericPacket.UNUSED_FIELD,
-                                E2EComm.serialize("")
-                        );
+                        new Thread(() -> {
+                            try {
+                                boolean sent = false;
+                                Integer nodeId = Integer.parseInt(((EditText) findViewById(R.id.idBench)).getText().toString());
+                                int port = Integer.parseInt(((EditText) findViewById(R.id.portBench)).getText().toString());
+                                Vector<ResolverPath> availablePaths = Resolver.getInstance(false).resolveBlocking(nodeId);
+
+                                if (availablePaths != null) {
+                                    ResolverPath bestPath = null;
+
+                                    for (int i = 0; i < availablePaths.size(); i++) {
+                                        ResolverPath aPath = availablePaths.elementAt(i);
+                                        if (bestPath == null) {
+                                            bestPath = aPath;
+                                        } else if (aPath.getPath().length < bestPath.getPath().length) {
+                                            bestPath = aPath;
+                                        }
+                                    }
+
+                                    if (bestPath != null) {
+                                        E2EComm.sendUnicast(bestPath.getPath(),
+                                                nodeId,
+                                                port,
+                                                E2EComm.TCP,
+                                                false,
+                                                GenericPacket.UNUSED_FIELD,
+                                                E2EComm.DEFAULT_BUFFERSIZE,
+                                                GenericPacket.UNUSED_FIELD, // timeWait
+                                                600, // expiry
+                                                GenericPacket.UNUSED_FIELD,
+                                                E2EComm.serialize(""));
+                                        sent = true;
+                                    } else {
+                                        E2EComm.sendUnicast(availablePaths.firstElement().getPath(),
+                                                nodeId,
+                                                port,
+                                                E2EComm.TCP,
+                                                false,
+                                                GenericPacket.UNUSED_FIELD,
+                                                E2EComm.DEFAULT_BUFFERSIZE,
+                                                GenericPacket.UNUSED_FIELD, // timeWait
+                                                600, // expiry
+                                                GenericPacket.UNUSED_FIELD,
+                                                E2EComm.serialize(""));
+                                        sent = true;
+                                    }
+                                    // FIXME
+                                    Benchmark.append(System.currentTimeMillis(), "ramp_maneger_activity_send_message", 0, 0, 0);
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Impossible to send the message", Toast.LENGTH_LONG).show();
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }).start();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } else {
-                    System.out.println("RAMPManagerActivity: onClick = R.id.sendMessageBench FALSE");
                     Toast.makeText(getApplicationContext(), "Before send message you have to " +
                             "activate RAMP!", Toast.LENGTH_LONG).show();
                 }
