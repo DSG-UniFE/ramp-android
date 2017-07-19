@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 
+import it.unibo.deis.lia.ramp.util.Benchmark;
 import it.unife.dsg.ramp_android.R;
 import it.unife.dsg.ramp_android.RampManagerActivity;
 import it.unife.dsg.ramp_android.util.Constants;
@@ -31,21 +32,34 @@ public class LCCReceiver extends BroadcastReceiver {
                 System.out.println("LCCReceiver >>> " + extras.getInt("data"));
                 switch (extras.getInt("data")) {
                     case Constants.MESSAGE_LCC_DEACTIVATE:
+                        // FIXME
+                        Benchmark.append(System.currentTimeMillis(), "lcc_receiver_deactivate",
+                                0, 0, 0);
                         break;
 
                     case Constants.MESSAGE_LCC_ACTIVATE:
+                        // FIXME
+                        Benchmark.append(System.currentTimeMillis(), "lcc_receiver_activate",
+                                0, 0, 0);
                         break;
 
                     case Constants.MESSAGE_ROLE_CHANGED:
                         sendLocalBroadcast(context, Constants.MESSAGE_ROLE_CHANGED);
                         System.out.println("LCCReceiver sent message " +
                                 Constants.MESSAGE_ROLE_CHANGED);
+                        // FIXME
+                        Benchmark.append(System.currentTimeMillis(), "lcc_receiver_changed_role",
+                                0, 0, 0);
+
                         break;
 
                     case Constants.MESSAGE_HOTSPOT_CHANGED:
                         sendLocalBroadcast(context, Constants.MESSAGE_HOTSPOT_CHANGED);
                         System.out.println("LCCReceiver sent message " +
                                 Constants.MESSAGE_HOTSPOT_CHANGED);
+                        // FIXME
+                        Benchmark.append(System.currentTimeMillis(), "lcc_receiver_changed_hotspot",
+                                0, 0, 0);
                         break;
                 }
             }
