@@ -106,8 +106,7 @@ public class FileSharingServiceActivity extends AppCompatActivity implements
                             "activating...");
                     if (ramp != null) {
                     	ramp.startService("FileSharingService");
-                    }
-                    else{
+                    } else {
                         CheckBox fssActive = (CheckBox)findViewById(R.id.fileSharingServiceActive);
                         fssActive.setChecked(FileSharingService.isActive());
                         Util.showShortToast(this, "Activate RAMP via the manager!");

@@ -113,6 +113,7 @@ public class RampManagerActivity extends AppCompatActivity implements OnClickLis
     public void onCreate(Bundle icicle) {
         System.out.println("RAMPManagerActivity: onCreate()");
         super.onCreate(icicle);
+
         managerActivity = RampManagerActivity.this;
         setContentView(R.layout.ramp_manager);
 
@@ -221,6 +222,10 @@ public class RampManagerActivity extends AppCompatActivity implements OnClickLis
         			Util.showShortToast(this, "Activate Continuity Manager!");
                 }
         		else{
+
+                    // FIXME
+                    Benchmark.createFile();
+
         			//start activity Opportunistic Networking Manager
         			try{
                         Class<?> activityClass = Class.forName("it.unife.dsg." +
@@ -248,7 +253,6 @@ public class RampManagerActivity extends AppCompatActivity implements OnClickLis
                                 Integer nodeId = Integer.parseInt(((EditText) findViewById(R.id.idBench)).getText().toString());
                                 int port = Integer.parseInt(((EditText) findViewById(R.id.portBench)).getText().toString());
                                 Vector<ResolverPath> availablePaths = Resolver.getInstance(false).resolveBlocking(nodeId);
-
                                 if (availablePaths != null) {
                                     ResolverPath bestPath = null;
 
@@ -270,7 +274,7 @@ public class RampManagerActivity extends AppCompatActivity implements OnClickLis
                                                 GenericPacket.UNUSED_FIELD,
                                                 E2EComm.DEFAULT_BUFFERSIZE,
                                                 GenericPacket.UNUSED_FIELD, // timeWait
-                                                600, // expiry
+                                                2800, // expiry
                                                 GenericPacket.UNUSED_FIELD,
                                                 E2EComm.serialize(""));
                                         sent = true;
@@ -283,15 +287,23 @@ public class RampManagerActivity extends AppCompatActivity implements OnClickLis
                                                 GenericPacket.UNUSED_FIELD,
                                                 E2EComm.DEFAULT_BUFFERSIZE,
                                                 GenericPacket.UNUSED_FIELD, // timeWait
-                                                600, // expiry
+                                                2800, // expiry
                                                 GenericPacket.UNUSED_FIELD,
                                                 E2EComm.serialize(""));
                                         sent = true;
                                     }
                                     // FIXME
-                                    Benchmark.append(System.currentTimeMillis(), "ramp_maneger_activity_send_message", 0, 0, 0);
+                                    Benchmark.append(System.currentTimeMillis(), "ramp_manager_activity_send_unicast_message", 0, 0, 0);
                                 } else {
-                                    Toast.makeText(getApplicationContext(), "Impossible to send the message", Toast.LENGTH_LONG).show();
+//                                    E2EComm.sendBroadcast(10,
+//                                        port,
+//                                        E2EComm.TCP,
+//                                        700,
+//                                        E2EComm.serialize(""));
+//                                    sent = true;
+//
+//                                    // FIXME
+//                                    Benchmark.append(System.currentTimeMillis(), "ramp_manager_activity_send_broadcast_message", 0, 0, 0);
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();

@@ -121,7 +121,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/id"
-            android:text="277594165"
+            android:text="1269376173"
             android:inputType="text" />
 
         <EditText
@@ -129,7 +129,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:text="35634"
+            android:text="40720"
             android:inputType="number"
             android:hint="@string/port" />
 

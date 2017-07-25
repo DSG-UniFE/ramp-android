@@ -33,13 +33,13 @@ public class LCCReceiver extends BroadcastReceiver {
                 switch (extras.getInt("data")) {
                     case Constants.MESSAGE_LCC_DEACTIVATE:
                         // FIXME
-                        Benchmark.append(System.currentTimeMillis(), "lcc_receiver_deactivate",
+                        Benchmark.append(System.currentTimeMillis(), "ramp_lcc_receiver_deactivate",
                                 0, 0, 0);
                         break;
 
                     case Constants.MESSAGE_LCC_ACTIVATE:
                         // FIXME
-                        Benchmark.append(System.currentTimeMillis(), "lcc_receiver_activate",
+                        Benchmark.append(System.currentTimeMillis(), "ramp_lcc_receiver_activate",
                                 0, 0, 0);
                         break;
 
@@ -48,7 +48,7 @@ public class LCCReceiver extends BroadcastReceiver {
                         System.out.println("LCCReceiver sent message " +
                                 Constants.MESSAGE_ROLE_CHANGED);
                         // FIXME
-                        Benchmark.append(System.currentTimeMillis(), "lcc_receiver_changed_role",
+                        Benchmark.append(System.currentTimeMillis(), "ramp_lcc_receiver_changed_role",
                                 0, 0, 0);
 
                         break;
@@ -58,7 +58,7 @@ public class LCCReceiver extends BroadcastReceiver {
                         System.out.println("LCCReceiver sent message " +
                                 Constants.MESSAGE_HOTSPOT_CHANGED);
                         // FIXME
-                        Benchmark.append(System.currentTimeMillis(), "lcc_receiver_changed_hotspot",
+                        Benchmark.append(System.currentTimeMillis(), "ramp_lcc_receiver_changed_hotspot",
                                 0, 0, 0);
                         break;
                 }
