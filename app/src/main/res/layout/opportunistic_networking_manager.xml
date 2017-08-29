@@ -64,8 +64,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:inputType="number"
-                android:text="@string/_600"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:text="@string/_30" />
 
             <TextView
                 android:id="@+id/sendPacketsPeriodUM"
@@ -149,7 +149,7 @@
             <Spinner
                 android:id="@+id/numberOfOneHopDestinationsSpinner"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:drawSelectorOnTop="true" />
 
         </TableRow>
@@ -203,11 +203,11 @@
                 android:text="@string/mechanism_to_replace_packets"
                 android:textAppearance="@android:style/TextAppearance.Small" />
 
-           <Spinner
-               android:id="@+id/replacePacketsSpinner"
-               android:layout_width="match_parent"
-               android:layout_height="match_parent"
-               android:drawSelectorOnTop="true" />
+            <Spinner
+                android:id="@+id/replacePacketsSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawSelectorOnTop="true" />
 
         </TableRow>
 
@@ -215,7 +215,7 @@
             android:id="@+id/backToManager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="32dp"
             android:drawSelectorOnTop="true"
             android:text="@string/back_to_manager" />
 

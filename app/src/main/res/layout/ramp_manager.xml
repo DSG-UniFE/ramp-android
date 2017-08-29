@@ -19,19 +19,20 @@
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
             android:gravity="center"
             android:text="@string/ramp_real_ad_hoc_multi_hop_peer_to_peer"
-            android:textAppearance="@android:style/TextAppearance.Large" />
-	
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
         <CheckBox
             android:id="@+id/rampActive"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/activate_ramp" />
-		
+
         <CheckBox
             android:id="@+id/cmConnect"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/activate_continuity_manager" />
 
@@ -39,11 +40,13 @@
             android:id="@+id/opportunisticNetworkingManagerButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
             android:text="@string/opportunistic_networking_manager" />
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
             android:orientation="horizontal" >
 
             <Button
@@ -54,10 +57,10 @@
 
             <TextView
                 android:id="@+id/neighborsArea"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/neighbors"
-                android:textAppearance="@android:style/TextAppearance.Small" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
         </TableRow>
 
@@ -65,8 +68,10 @@
             android:id="@+id/nodeId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="16dp"
             android:text="@string/node_id"
-            android:textAppearance="@android:style/TextAppearance.Small" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
         <TableRow
             android:layout_width="match_parent"
@@ -109,6 +114,31 @@
             android:layout_height="wrap_content"
             android:text=""
             android:textAppearance="@android:style/TextAppearance.Small" />
+
+        <EditText
+            android:id="@+id/idBench"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/id"
+            android:text="1269376173"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/portBench"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:text="40720"
+            android:inputType="number"
+            android:hint="@string/port" />
+
+        <Button
+            android:id="@+id/sendMessageBench"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/send_message"
+            android:textAlignment="center" />
 
     </LinearLayout>
 </ScrollView>

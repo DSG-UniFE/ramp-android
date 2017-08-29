@@ -4,7 +4,6 @@ package it.unife.dsg.ramp_android;
 //import java.net.URL;
 //import java.util.Date;
 
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -18,8 +17,7 @@ import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
-import android.os.Messenger;
-import android.os.RemoteException;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -28,6 +26,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 //import android.widget.ImageView;
 //import android.widget.LinearLayout;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,39 +34,41 @@ import android.widget.Toast;
 //import com.facebook.android.*;
 //import com.facebook.android.Facebook.*;
 
+import java.util.Vector;
+
 import it.unibo.deis.lia.ramp.RampEntryPoint;
 //import it.unibo.deis.lia.ramp.core.ern.SecureJoinEntrypoint;
 //import it.unibo.deis.lia.ramp.core.social.SocialObserver;
 //import it.unibo.deis.lia.ramp.core.social.SocialObserverFacebook;
 //import it.unibo.deis.lia.ramp.service.upnp.UpnpProxyEntrypoint;
-import it.unife.dsg.ramp_android.service.application.MessengerService;
+import it.unibo.deis.lia.ramp.core.e2e.GenericPacket;
+import it.unibo.deis.lia.ramp.core.internode.Resolver;
+import it.unibo.deis.lia.ramp.core.internode.ResolverPath;
+import it.unife.dsg.ramp_android.helper.RampLocalService;
 import it.unife.dsg.ramp_android.util.Util;
+
+import it.unibo.deis.lia.ramp.core.e2e.E2EComm;
 
 /**
  *
  * @author Carlo Giannelli
  */
-public class RampManagerActivity extends Activity implements OnClickListener, OnCheckedChangeListener {
+public class RampManagerActivity extends AppCompatActivity implements OnClickListener, OnCheckedChangeListener {
     
     private static RampEntryPoint ramp = null;
     private static RampManagerActivity managerActivity=null;
     private Handler uiHandler;
 
-    /** Messenger for communicating with the service. */
-    Messenger mService = null;
-    /** Flag indicating whether we have called bind on the service. */
-    boolean mBound;
-
 //    private Facebook facebook;
 //    private SocialObserverFacebook socialObserverFacebook;
-
     
     private ServiceConnection sc = new ServiceConnection() {
         public void onServiceConnected(ComponentName name, IBinder service) {
-            System.out.println("RampManagerActivity: onServiceConnected");
+            System.out.println("RampManagerActivity: onServiceConnected()");
+            String text = null;
 
             ramp = ((RampLocalService.RAMPAndroidServiceBinder) service).getRampEntryPoint();
-            ((CheckBox) findViewById(it.unife.dsg.ramp_android.R.id.rampActive)).setChecked(true);
+            ((CheckBox) findViewById(R.id.rampActive)).setChecked(true);
             
             // setup the handler for UI interaction from other threads
             HandlerThread uiThread = new HandlerThread("UIHandler");
@@ -75,47 +76,25 @@ public class RampManagerActivity extends Activity implements OnClickListener, On
             uiHandler = new UIHandler(uiThread.getLooper(), getApplicationContext());
             RampEntryPoint.setAndroidUIHandler(uiHandler);
 
-            String nodeId = ramp.getNodeIdString();
-            ((TextView)findViewById(it.unife.dsg.ramp_android.R.id.nodeId)).setText("node ID = " + nodeId);
+            text = getString(R.string.node_id) + " " + ramp.getNodeIdString();
+            ((TextView)findViewById(R.id.nodeId)).setText(text);
 
             String[] neighbors = ramp.getCurrentNeighbors();
-            String text = "Neighbors:\n";
+            text = "Neighbors:\n";
             for(int i=0; i<neighbors.length; i++){
                 text += neighbors[i];
                 if(i<neighbors.length-1){
                     text += "\n";
                 }
             }
-            TextView area = (TextView)findViewById(it.unife.dsg.ramp_android.R.id.neighborsArea);
+            TextView area = (TextView)findViewById(R.id.neighborsArea);
             area.setText(text);
         }
         
         public void onServiceDisconnected(ComponentName arg0) {
-            System.out.println("RampManagerActivity: onServiceDisconnected");
+            System.out.println("RampManagerActivity: onServiceDisconnected()");
             ramp = null;
-            ((CheckBox) findViewById(it.unife.dsg.ramp_android.R.id.rampActive)).setChecked(false);
-        }
-    };
-
-    /**
-     * Class for interacting with the main interface of the service.
-     */
-    private ServiceConnection mConnection = new ServiceConnection() {
-        public void onServiceConnected(ComponentName className, IBinder service) {
-            // This is called when the connection with the service has been
-            // established, giving us the object we can use to
-            // interact with the service.  We are communicating with the
-            // service using a Messenger, so here we get a client-side
-            // representation of that from the raw IBinder object.
-            mService = new Messenger(service);
-            mBound = true;
-        }
-
-        public void onServiceDisconnected(ComponentName className) {
-            // This is called when the connection with the service has been
-            // unexpectedly disconnected -- that is, its process crashed.
-            mService = null;
-            mBound = false;
+            ((CheckBox) findViewById(R.id.rampActive)).setChecked(false);
         }
     };
 
@@ -126,72 +105,53 @@ public class RampManagerActivity extends Activity implements OnClickListener, On
     }
 
 
-    public void sayHello(View v) {
-        if (!mBound) return;
-        // Create and send a message to the service, using a supported 'what' value
-        Message msg = Message.obtain(null, MessengerService.MSG_SAY_HELLO, 0, 0);
-
-        // Create a bundle with the data
-        Bundle bundle = new Bundle();
-        bundle.putString("hello", "giulio");
-
-        // Set the bundle data to the Message
-        msg.setData(bundle);
-        try {
-            mService.send(msg);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    /** Called when the activity is first created. */
+    /**
+     * Called when the activity is first created.
+     */
     @Override
     public void onCreate(Bundle icicle) {
-        System.out.println("RAMPManagerActivity: onCreate");
+        System.out.println("RAMPManagerActivity: onCreate()");
         super.onCreate(icicle);
-        managerActivity = RampManagerActivity.this;
-        setContentView(it.unife.dsg.ramp_android.R.layout.ramp_manager);
 
-        Spinner spinnerServices = (Spinner)findViewById(it.unife.dsg.ramp_android.R.id.serviceSpinner);
-        System.out.println("RAMPManagerActivity: spinnerServices = "+spinnerServices);
-        String[] services = new String[] { "FileSharingService","ChatService" };
+        managerActivity = RampManagerActivity.this;
+        setContentView(R.layout.ramp_manager);
+
+        Spinner spinnerServices = (Spinner) findViewById(R.id.serviceSpinner);
+        String[] services = new String[]{"FileSharingService", "ChatService"};
         Util.populateSpinner(this, spinnerServices, services);
 
-        Spinner spinnerClients = (Spinner)findViewById(it.unife.dsg.ramp_android.R.id.clientSpinner);
-        System.out.println("RAMPManagerActivity: spinnerClients = "+spinnerClients);
-        String[] clients = new String[] { "FileSharingClient", "BroadcastClient" };
+        Spinner spinnerClients = (Spinner) findViewById(R.id.clientSpinner);
+        String[] clients = new String[]{"FileSharingClient", "BroadcastClient"};
         Util.populateSpinner(this, spinnerClients, clients);
 
-        findViewById(it.unife.dsg.ramp_android.R.id.goToClient).setOnClickListener(this);
-        findViewById(it.unife.dsg.ramp_android.R.id.goToService).setOnClickListener(this);
-        findViewById(it.unife.dsg.ramp_android.R.id.refreshNeighbors).setOnClickListener(this);
-        //findViewById(R.id.setNodeId).setOnClickListener(this);
-        //findViewById(R.id.connectToEsmn).setOnClickListener(this);
+        findViewById(R.id.goToClient).setOnClickListener(this);
+        findViewById(R.id.goToService).setOnClickListener(this);
+        findViewById(R.id.refreshNeighbors).setOnClickListener(this);
+//        findViewById(R.id.setNodeId).setOnClickListener(this);
+//        findViewById(R.id.connectToEsmn).setOnClickListener(this);
 //        findViewById(R.id.loginWithFacebookButton).setOnClickListener(this);
 //        findViewById(R.id.logoutFacebook).setOnClickListener(this);
-        findViewById(it.unife.dsg.ramp_android.R.id.opportunisticNetworkingManagerButton).setOnClickListener(this);
-        
-        ((TextView)findViewById(it.unife.dsg.ramp_android.R.id.buildTime)).setText("build time = " + RampEntryPoint.releaseDate);
-        
-        CheckBox rampActive = (CheckBox)findViewById(it.unife.dsg.ramp_android.R.id.rampActive);
+        findViewById(R.id.opportunisticNetworkingManagerButton).setOnClickListener(this);
+        findViewById(R.id.sendMessageBench).setOnClickListener(this);
+
+        ((TextView) findViewById(R.id.buildTime)).setText("build time = " + RampEntryPoint.releaseDate);
+
+        CheckBox rampActive = (CheckBox) findViewById(R.id.rampActive);
         rampActive.setOnCheckedChangeListener(this);
-        
+
 //        CheckBox upnpActive = (CheckBox)findViewById(R.id.upnpActive);
 //        upnpActive.setOnCheckedChangeListener(this);
 //        CheckBox socialConnect = (CheckBox)findViewById(R.id.socialConnect);
 //        socialConnect.setOnCheckedChangeListener(this);
-        
-        //Stefano Lanzone
-        CheckBox cmConnect = (CheckBox)findViewById(it.unife.dsg.ramp_android.R.id.cmConnect);
-        cmConnect.setOnCheckedChangeListener(this);
-        
 
-        
+        //Stefano Lanzone
+        CheckBox cmConnect = (CheckBox) findViewById(R.id.cmConnect);
+        cmConnect.setOnCheckedChangeListener(this);
+
         // hide soft keyboard at activity start-up
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
-    
+
     public void onClick(View view) {
         // CheckBox socialConnect;
     	if( ! RampEntryPoint.isActive() ) {
@@ -201,11 +161,11 @@ public class RampManagerActivity extends Activity implements OnClickListener, On
                     "have to activate RAMP!");
         } else {
         	switch(view.getId()){
-            case it.unife.dsg.ramp_android.R.id.goToClient:
+            case R.id.goToClient:
                 System.out.println("RAMPManagerActivity: onClick = R.id.goToClient");
 
                 // start client
-                Spinner spinner = (Spinner)findViewById(it.unife.dsg.ramp_android.R.id.clientSpinner);
+                Spinner spinner = (Spinner)findViewById(R.id.clientSpinner);
                 
                 // start Activity for this client
                 try{
@@ -221,9 +181,9 @@ public class RampManagerActivity extends Activity implements OnClickListener, On
                     e.printStackTrace();
                 }
                 break;
-            case it.unife.dsg.ramp_android.R.id.goToService:
+            case R.id.goToService:
                 System.out.println("RAMPManagerActivity: onClick = R.id.goToService");
-                spinner = (Spinner)findViewById(it.unife.dsg.ramp_android.R.id.serviceSpinner);
+                spinner = (Spinner)findViewById(R.id.serviceSpinner);
 
                 // start Activity for this service
                 try {
@@ -238,7 +198,7 @@ public class RampManagerActivity extends Activity implements OnClickListener, On
                     e.printStackTrace();
                 }
                 break;
-            case it.unife.dsg.ramp_android.R.id.refreshNeighbors:
+            case R.id.refreshNeighbors:
                 System.out.println("RAMPManagerActivity: onClick = R.id.refreshNeighbors");
                 ramp.forceNeighborsUpdate();
                 String[] neighbors = ramp.getCurrentNeighbors();
@@ -249,13 +209,13 @@ public class RampManagerActivity extends Activity implements OnClickListener, On
                         text += "\n";
                     }
                 }
-                TextView area = (TextView)findViewById(it.unife.dsg.ramp_android.R.id.neighborsArea);
+                TextView area = (TextView)findViewById(R.id.neighborsArea);
                 area.setText(text);
                 break;
-            case it.unife.dsg.ramp_android.R.id.opportunisticNetworkingManagerButton:
+            case R.id.opportunisticNetworkingManagerButton:
             	//Stefano Lanzone
             	System.out.println("RAMPManagerActivity: onClick = R.id.opportunisticNetworkingManagerButton");
-            	CheckBox cmConnect = (CheckBox)findViewById(it.unife.dsg.ramp_android.R.id.cmConnect);
+            	CheckBox cmConnect = (CheckBox)findViewById(R.id.cmConnect);
             	
         		if( ! cmConnect.isChecked() ){
         			Util.showShortToast(this, "Activate Continuity Manager!");
@@ -276,6 +236,78 @@ public class RampManagerActivity extends Activity implements OnClickListener, On
                     }
         		}
             	break;
+
+            case R.id.sendMessageBench:
+                System.out.println("RAMPManagerActivity: onClick = R.id.sendMessageBench");
+
+                if (RampEntryPoint.isActive()) {
+                    try {
+                        new Thread(() -> {
+                            try {
+                                boolean sent = false;
+                                Integer nodeId = Integer.parseInt(((EditText) findViewById(R.id.idBench)).getText().toString());
+                                int port = Integer.parseInt(((EditText) findViewById(R.id.portBench)).getText().toString());
+                                Vector<ResolverPath> availablePaths = Resolver.getInstance(false).resolveBlocking(nodeId);
+                                if (availablePaths != null) {
+                                    ResolverPath bestPath = null;
+
+                                    for (int i = 0; i < availablePaths.size(); i++) {
+                                        ResolverPath aPath = availablePaths.elementAt(i);
+                                        if (bestPath == null) {
+                                            bestPath = aPath;
+                                        } else if (aPath.getPath().length < bestPath.getPath().length) {
+                                            bestPath = aPath;
+                                        }
+                                    }
+
+                                    if (bestPath != null) {
+                                        E2EComm.sendUnicast(bestPath.getPath(),
+                                                nodeId,
+                                                port,
+                                                E2EComm.TCP,
+                                                false,
+                                                GenericPacket.UNUSED_FIELD,
+                                                E2EComm.DEFAULT_BUFFERSIZE,
+                                                GenericPacket.UNUSED_FIELD, // timeWait
+                                                2800, // expiry
+                                                GenericPacket.UNUSED_FIELD,
+                                                E2EComm.serialize(""));
+                                        sent = true;
+                                    } else {
+                                        E2EComm.sendUnicast(availablePaths.firstElement().getPath(),
+                                                nodeId,
+                                                port,
+                                                E2EComm.TCP,
+                                                false,
+                                                GenericPacket.UNUSED_FIELD,
+                                                E2EComm.DEFAULT_BUFFERSIZE,
+                                                GenericPacket.UNUSED_FIELD, // timeWait
+                                                2800, // expiry
+                                                GenericPacket.UNUSED_FIELD,
+                                                E2EComm.serialize(""));
+                                        sent = true;
+                                    }
+                                } else {
+//                                    E2EComm.sendBroadcast(10,
+//                                        port,
+//                                        E2EComm.TCP,
+//                                        700,
+//                                        E2EComm.serialize(""));
+//                                    sent = true;
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }).start();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), "Before send message you have to " +
+                            "activate RAMP!", Toast.LENGTH_LONG).show();
+                }
+
+                break;
             /*case R.id.connectToEsmn:
             	
 			     LayoutInflater factory = LayoutInflater.from(this);
@@ -394,7 +426,7 @@ public class RampManagerActivity extends Activity implements OnClickListener, On
     
     @Override
     public void onBackPressed() {
-        System.out.println("RAMPManagerActivity: onBackPressed");
+        System.out.println("RAMPManagerActivity: onBackPressed()");
         // go back to the phone home display
         Intent i = new Intent();
         i.setAction(Intent.ACTION_MAIN);
@@ -404,52 +436,53 @@ public class RampManagerActivity extends Activity implements OnClickListener, On
 
     @Override
     protected void onDestroy() {
-        System.out.println("RAMPManagerActivity: onDestroy");
+        System.out.println("RAMPManagerActivity: onDestroy()");
         super.onDestroy();
     }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-    	final int id = buttonView.getId();
-        switch(id){
-            case it.unife.dsg.ramp_android.R.id.rampActive:
+        final int id = buttonView.getId();
+        switch (id) {
+            case R.id.rampActive:
                 System.out.println("RAMPManagerActivity: onCheckedChanged = R.id.rampActive " + isChecked);
-                if(isChecked){
-                	if(ramp == null) {
-                		Intent serviceIntent = new Intent(this, RampLocalService.class);
-                		startService(serviceIntent);
-                		bindService(serviceIntent, sc, Context.BIND_AUTO_CREATE);
-                	}
-                }
-                else{
-                    if( ramp != null ){
-                    	//stop upnp
+                if (isChecked) {
+                    if (ramp == null) {
+                        Intent serviceIntent = new Intent(this, RampLocalService.class);
+                        startService(serviceIntent);
+                        bindService(serviceIntent, sc, Context.BIND_AUTO_CREATE);
+                    }
+                } else {
+                    if (ramp != null) {
+                        //stop upnp
 //                        CheckBox upnpActive = (CheckBox)findViewById(R.id.upnpActive);
 //                        upnpActive.setChecked(false);
-                        
+
                         // stop social connect
 //                        CheckBox socialConnect = (CheckBox)findViewById(R.id.socialConnect);
 //                        socialConnect.setChecked(false);
-                        
+
                         // stop continuity manager
-                        CheckBox cmConnect = (CheckBox)findViewById(it.unife.dsg.ramp_android.R.id.cmConnect);
+                        CheckBox cmConnect = (CheckBox) findViewById(R.id.cmConnect);
                         cmConnect.setChecked(false);
-                    	
+
+                        // Stop RAMP
+                        ramp.stopRamp();
+
                         // stop RampLocalService
                         unbindService(sc);
-                        Intent serviceIntent = new Intent(
-                            RampManagerActivity.this,
-                            RampLocalService.class
-                        );
+                        Intent serviceIntent = new Intent(RampManagerActivity.this,
+                                RampLocalService.class);
                         stopService(serviceIntent);
-                        
+
                         // restore facebook login button
 //                        showFacebookLoginButton();
-                        
+
                         ramp = null;
                     }
                 }
                 break;
+
 //            case R.id.upnpActive:
 //            	System.out.println("RAMPManagerActivity: onCheckedChanged = R.id.uPnPActive "+isChecked);
 //            	if(isChecked){
@@ -466,49 +499,48 @@ public class RampManagerActivity extends Activity implements OnClickListener, On
 //            		ramp.stopUpnpProxyEntrypoint();
 //            	}
 //            	break;
-        	case it.unife.dsg.ramp_android.R.id.cmConnect:
-        		System.out.println("RAMPManagerActivity: onCheckedChanged = R.id.cmConnect");
-        		if(isChecked){
-            		if( ! RampEntryPoint.isActive() ){
-            			Util.showShortToast(this, "Activate RAMP!");
-                        CheckBox cmConnect = (CheckBox)findViewById(it.unife.dsg.ramp_android.R.id.cmConnect);
+
+            case R.id.cmConnect:
+                System.out.println("RAMPManagerActivity: onCheckedChanged = R.id.cmConnect");
+                if (isChecked) {
+                    if (!RampEntryPoint.isActive()) {
+                        Util.showShortToast(this, "Activate RAMP!");
+                        CheckBox cmConnect = (CheckBox) findViewById(R.id.cmConnect);
                         cmConnect.setChecked(false);
-                    }
-            		else{
+                    } else {
 //            			ramp.startSecureJoinEntrypoint(null); // can be null on android (never use username and pass)
 //    					ramp.startSocialObserver(null, null); // as above
 //            			socialObserverFacebook = SocialObserver.getInstance().getSocialObserverFacebook();
 //            			checkFacebookTokenAsync();
 //            			showFacebookInfo("Fetching Facebook information...", null, null);
-            			
-            			ramp.startContinuityManager(); //Stefano Lanzone
-            		}
-            	}
-        		else{
+
+                        ramp.startContinuityManager(); //Stefano Lanzone
+                    }
+                } else {
 //        			ramp.stopSecureJoinEntrypoint();
 //        			ramp.stopSocialObserver();
-        			
-        			ramp.stopContinuityManager(); //Stefano Lanzone
-        		}
+
+                    ramp.stopContinuityManager(); //Stefano Lanzone
+                }
                 break;
         }
     }
 
     @Override
     protected void onPause() {
-        System.out.println("RAMPManagerActivity: onPause");
+        System.out.println("RAMPManagerActivity: onPause()");
         super.onPause();
     }
 
     @Override
     protected void onRestart() {
-        System.out.println("RAMPManagerActivity: onRestart");
+        System.out.println("RAMPManagerActivity: onRestart()");
         super.onRestart();
     }
 
     @Override
     protected void onResume() {
-        System.out.println("RAMPManagerActivity: onResume");
+        System.out.println("RAMPManagerActivity: onResume()");
         super.onResume();
         
 //        CheckBox upnpActive = (CheckBox)findViewById(R.id.upnpActive);
@@ -521,22 +553,19 @@ public class RampManagerActivity extends Activity implements OnClickListener, On
 
     @Override
     protected void onStart() {
-        System.out.println("RAMPManagerActivity: onStart");
+        System.out.println("RAMPManagerActivity: onStart()");
         super.onStart();
         
-        if( RampEntryPoint.isActive() ) {
+        if (RampEntryPoint.isActive()) {
         	bindService(new Intent(this, RampLocalService.class), sc, Context.BIND_AUTO_CREATE);
         }
-
-        // Bind to the service
-        bindService(new Intent(this, MessengerService.class), mConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
     protected void onStop() {
-        System.out.println("RAMPManagerActivity: onStop");
+        System.out.println("RAMPManagerActivity: onStop()");
         super.onStop();
-        if(ramp != null) {
+        if (ramp != null) {
         	unbindService(sc);
         }
     }

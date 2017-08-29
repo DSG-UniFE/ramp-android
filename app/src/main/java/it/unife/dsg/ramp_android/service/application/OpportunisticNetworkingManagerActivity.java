@@ -1,9 +1,9 @@
 
 package it.unife.dsg.ramp_android.service.application;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,14 +27,14 @@ import it.unibo.deis.lia.ramp.core.internode.OpportunisticNetworkingManager.Repl
  *
  * @author Stefano Lanzone
  */
-public class OpportunisticNetworkingManagerActivity extends Activity  implements OnClickListener, OnCheckedChangeListener {
+public class OpportunisticNetworkingManagerActivity extends AppCompatActivity implements OnClickListener, OnCheckedChangeListener {
 
     private OpportunisticNetworkingManager onm = null;
 
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        System.out.println("OpportunisticNetworkingManagerActivity: onCreate savedInstanceState = " + savedInstanceState);
+        System.out.println("OpportunisticNetworkingManagerActivity: onCreate() savedInstanceState = " + savedInstanceState);
         super.onCreate(savedInstanceState);
 
         //if(savedInstanceState == null){
@@ -75,10 +75,10 @@ public class OpportunisticNetworkingManagerActivity extends Activity  implements
     public void onClick(View view) {
         checkRampState();
 
-        if( view.getId() == R.id.backToManager){
+        if( view.getId() == R.id.backToManager) {
         	onBackPressed();
         }
-        else if( onm==null ){
+        else if( onm==null ) {
             Util.showShortToast(this, "Activate Continuity Manager via the RAMP Manager!");
         }
         else{
@@ -87,10 +87,10 @@ public class OpportunisticNetworkingManagerActivity extends Activity  implements
     }
 
 	private void checkRampState() {
-		if( RampEntryPoint.isActive() && onm==null ){
+		if( RampEntryPoint.isActive() && onm==null ) {
         	onm = OpportunisticNetworkingManager.getInstance(true);
         }
-        else if( !RampEntryPoint.isActive() && onm!=null ){
+        else if( !RampEntryPoint.isActive() && onm!=null ) {
         	onm.deactivate(true);
         	onm = null;
         }
@@ -155,7 +155,7 @@ public class OpportunisticNetworkingManagerActivity extends Activity  implements
     }
 
 	private void saveActivityState(){
-		System.out.println("OpportunisticNetworkingManagerActivity: saveActivityState");
+		System.out.println("OpportunisticNetworkingManagerActivity: saveActivityState()");
 		// Use shared preferences to save the activity state
 		SharedPreferences settings = getPreferences(MODE_PRIVATE);
 		SharedPreferences.Editor editor = settings.edit();
@@ -189,10 +189,9 @@ public class OpportunisticNetworkingManagerActivity extends Activity  implements
 //		Util.saveRemoteServices(editor, services);
 
 		// Commit
-		editor.commit();
+		editor.apply();
 		
-		if(onm != null)
-		{
+		if(onm != null) {
 			onm.setSendPacketsPeriod(sendPacketsPeriod);
 			onm.setExpirationTimeManagedPackets(expirationTimeManagedPackets);
 			onm.setPersistPackets(persistPackets);
@@ -212,7 +211,7 @@ public class OpportunisticNetworkingManagerActivity extends Activity  implements
 	}
 
 	private void restoreActivityState(){
-		System.out.println("OpportunisticNetworkingManagerActivity: restoreActivityState");
+		System.out.println("OpportunisticNetworkingManagerActivity: restoreActivityState()");
 		// Use shared preferences to restore the activity state
 		SharedPreferences settings = getPreferences(MODE_PRIVATE);
 		
@@ -228,8 +227,7 @@ public class OpportunisticNetworkingManagerActivity extends Activity  implements
 		int packetSizeThresholdHigher = 100;
 		int packetSizeThresholdLower = 50;
 		ReplacePackets rp = ReplacePackets.OLD;
-		if(onm != null)
-		{
+		if(onm != null) {
 			persistPackets = onm.isPersistPackets();
 			removePacketAfterSend = onm.isRemovePacketAfterSend();
 		    sendPacketsPeriod = onm.getSendPacketsPeriod();
@@ -291,44 +289,46 @@ public class OpportunisticNetworkingManagerActivity extends Activity  implements
 
     @Override
     public void onBackPressed() {
-        System.out.println("OpportunisticNetworkingManagerActivity: onBackPressed");
+        System.out.println("OpportunisticNetworkingManagerActivity: onBackPressed()");
         super.onBackPressed();
     }
 
     @Override
     protected void onDestroy() {
-        System.out.println("OpportunisticNetworkingManagerActivity: onDestroy, isFinishing = " + this.isFinishing());
+        System.out.println("OpportunisticNetworkingManagerActivity: onDestroy(), isFinishing = " +
+				this.isFinishing());
         super.onDestroy();
     }
 
     @Override
     protected void onPause() {
-        System.out.println("OpportunisticNetworkingManagerActivity: onPause, isFinishing = " + this.isFinishing());
+        System.out.println("OpportunisticNetworkingManagerActivity: onPause(), isFinishing = " +
+                this.isFinishing());
         super.onPause();
         saveActivityState();
     }
 
     @Override
     protected void onRestart() {
-        System.out.println("OpportunisticNetworkingManagerActivity: onRestart");
+        System.out.println("OpportunisticNetworkingManagerActivity: onRestart()");
         super.onRestart();
     }
 
     @Override
     protected void onResume() {
-        System.out.println("OpportunisticNetworkingManagerActivity: onResume");
+        System.out.println("OpportunisticNetworkingManagerActivity: onResume()");
         super.onResume();
     }
 
     @Override
     protected void onStart() {
-        System.out.println("OpportunisticNetworkingManagerActivity: onStart");
+        System.out.println("OpportunisticNetworkingManagerActivity: onStart()");
         super.onStart();
     }
 
     @Override
     protected void onStop() {
-        System.out.println("OpportunisticNetworkingManagerActivity: onStop");
+        System.out.println("OpportunisticNetworkingManagerActivity: onStop()");
         super.onStop();
     }
 

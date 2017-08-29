@@ -19,15 +19,14 @@
         <ListView
             android:id="@+id/listOpenChat"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="3dip"
-            android:paddingTop="2dip" />
+            android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/openChat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawSelectorOnTop="true"
+            android:layout_marginTop="8dp"
             android:text="@string/open_chat_session" />
 
         <Button
@@ -35,6 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawSelectorOnTop="true"
+            android:layout_marginTop="8dp"
             android:text="@string/close_chat_session" />
 
         <Button
@@ -42,6 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawSelectorOnTop="true"
+            android:layout_marginTop="32dp"
             android:text="@string/back_to_chat_service" />
 
     </LinearLayout>

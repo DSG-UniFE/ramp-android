@@ -2,6 +2,7 @@
 package it.unife.dsg.ramp_android.service.application;
 
 import java.io.ByteArrayOutputStream;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -9,7 +10,6 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
 
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -20,6 +20,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -57,12 +58,12 @@ import it.unibo.deis.lia.ramp.service.management.ServiceResponse;
 * @author Stefano Lanzone
 */
 
-public class ChatServiceActivity extends Activity implements
+public class ChatServiceActivity extends AppCompatActivity implements
 		OnClickListener {
 
     // Unique Identification Number for the Notification.
     // We use it on Notification start, and to cancel it.
-    static private final int RampActiveNotification = R.string.ramp_active_notification;
+    static private final int ActiveNotificationID = R.string.ramp_active_notification;
 
 	private ChatServiceON ch=null;
 	private Hashtable<String, ServiceResponse> contacts = null;
@@ -370,8 +371,10 @@ public class ChatServiceActivity extends Activity implements
                 		Util.showShortToast(this, "Bx message not sent!");
                 	else
                 	{
-                		Date date=new Date(System.currentTimeMillis());
-                		String messageBoard = date.toLocaleString() +": "+message;
+                		Date date = new Date(System.currentTimeMillis());
+                        DateFormat format = DateFormat.getDateInstance();
+                		String messageBoard = format.format(date) + ": " + message;
+
                 		String lastMessages = bxMessageSent.getText().toString();
                 		if(!lastMessages.equals(""))
                 			lastMessages = lastMessages + "\n";
@@ -633,7 +636,7 @@ public class ChatServiceActivity extends Activity implements
 
             notificationBuilder.setContentIntent(pIntent);
             // Because the ID remains unchanged, the existing notification is updated.
-            notificationManager.notify(RampActiveNotification, notificationBuilder.build());
+            notificationManager.notify(ActiveNotificationID, notificationBuilder.build());
 		}
 		else
 		{
@@ -668,7 +671,7 @@ public class ChatServiceActivity extends Activity implements
 				NotificationManager notificationManager =
 						(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 // Because the ID remains unchanged, the existing notification is updated.
-                notificationManager.notify(RampActiveNotification, notificationBuilder.build());
+                notificationManager.notify(ActiveNotificationID, notificationBuilder.build());
 
 				// Build notification
 				//Notification notification = new Notification();

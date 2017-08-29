@@ -124,8 +124,7 @@
             android:id="@+id/discoverServices"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/find_services"
-            android:layout_marginTop="8dp" />
+            android:text="@string/find_services" />
 
         <Spinner
             android:id="@+id/remoteServices"
@@ -137,7 +136,7 @@
             android:id="@+id/getRemoteFileList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="24dp"
             android:text="@string/get_remote_file_list" />
 
         <Spinner
@@ -219,7 +218,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="@string/get_local_file_list"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="24dp" />
 
         <Spinner
             android:id="@+id/localFilesSpinner"
@@ -298,7 +297,7 @@
             android:id="@+id/backToManager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="32dp"
             android:drawSelectorOnTop="true"
             android:text="@string/back_to_manager" />
 

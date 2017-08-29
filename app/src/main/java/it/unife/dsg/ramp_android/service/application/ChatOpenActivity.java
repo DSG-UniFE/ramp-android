@@ -1,9 +1,9 @@
 
 package it.unife.dsg.ramp_android.service.application;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,7 +36,7 @@ import java.util.List;
 *
 * @author Stefano Lanzone
 */
-public class ChatOpenActivity extends Activity implements OnClickListener {
+public class ChatOpenActivity extends AppCompatActivity implements OnClickListener {
 
 	private ChatServiceON ch=null;
 	private ListView openedChatList;

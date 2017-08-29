@@ -1,9 +1,9 @@
 
 package it.unife.dsg.ramp_android.service.application;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -28,7 +28,7 @@ import java.util.Vector;
  *
  * @author Carlo Giannelli
  */
-public class FileSharingClientActivity extends Activity  implements OnClickListener {
+public class FileSharingClientActivity extends AppCompatActivity implements OnClickListener {
 
     private FileSharingClient fsc = null;
     private Vector<ServiceResponse> services = null;
@@ -111,8 +111,12 @@ public class FileSharingClientActivity extends Activity  implements OnClickListe
                     break;
                 case R.id.getRemoteFileList:
                     System.out.println("FileSharingClientActivity: onClick = R.id.getRemoteFileList");
-                    Spinner servicesSpinner = (Spinner)findViewById(R.id.remoteServices);
                     try {
+                        Spinner servicesSpinner = (Spinner)findViewById(R.id.remoteServices);
+
+                        System.out.println("FileSharingClientActivity,  servicesSpinner: " + servicesSpinner);
+
+
                         if( services!=null && services.size()>0 ){
                             String[] remoteFiles = fsc.getRemoteFileList(services.elementAt(servicesSpinner.getSelectedItemPosition()));
                             Spinner remoteFilesSpinner = (Spinner)findViewById(R.id.remoteFilesSpinner);
@@ -184,21 +188,23 @@ public class FileSharingClientActivity extends Activity  implements OnClickListe
                         if(localFilesSpinner!=null && localFilesSpinner.getSelectedView()!=null){
                             Spinner spinnerServices = (Spinner)findViewById(R.id.remoteServices);
                             String sendingLocalFile = localFilesSpinner.getSelectedItem().toString();
-                            System.out.println("FileSharingClientActivity: sending "+sendingLocalFile);
+                            System.out.println("FileSharingClientActivity: sending " +
+                                    sendingLocalFile);
                             try {
                             	//Get expiry value
                             	int expiry = GenericPacket.UNUSED_FIELD;
-                            	if(RampEntryPoint.isActive() && RampEntryPoint.getInstance(false, null).isContinuityManagerActive())
-                                {
+                            	if(RampEntryPoint.isActive() && RampEntryPoint.getInstance(false,
+                                        null).isContinuityManagerActive()) {
                             		expiry = Integer.parseInt(((EditText)findViewById(R.id.expiryValueLocalFile)).getText().toString());
-                            		System.out.println("FileSharingClientActivity: send local file operation expires after "+expiry+" seconds");
+                            		System.out.println("FileSharingClientActivity: send local " +
+                                            "file operation expires after " + expiry + " seconds");
                                 }
-                            	
+
                                 fsc.sendLocalFile(
                                         services.elementAt(spinnerServices.getSelectedItemPosition()),
-                                        sendingLocalFile, expiry
-                                );
-                                System.out.println("FileSharingClientActivity: local file "+sendingLocalFile+" sent");
+                                        sendingLocalFile, expiry);
+                                System.out.println("FileSharingClientActivity: local file " +
+                                        sendingLocalFile + " sent");
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }
@@ -247,7 +253,7 @@ public class FileSharingClientActivity extends Activity  implements OnClickListe
 		Util.saveRemoteServices(editor, services);
 
 		// Commit
-		editor.commit();
+		editor.apply();
 	}
 
 	private void restoreActivityState(){
@@ -269,46 +275,44 @@ public class FileSharingClientActivity extends Activity  implements OnClickListe
 
     @Override
     public void onBackPressed() {
-        System.out.println("FileSharingClientActivity: onBackPressed");
+        System.out.println("FileSharingClientActivity: onBackPressed()");
         super.onBackPressed();
     }
 
     @Override
     protected void onDestroy() {
-        System.out.println("FileSharingClientActivity: onDestroy, isFinishing = " + this.isFinishing());
+        System.out.println("FileSharingClientActivity: onDestroy(), isFinishing = " + this.isFinishing());
         super.onDestroy();
     }
 
     @Override
     protected void onPause() {
-        System.out.println("FileSharingClientActivity: onPause, isFinishing = " + this.isFinishing());
+        System.out.println("FileSharingClientActivity: onPause(), isFinishing = " + this.isFinishing());
         super.onPause();
         saveActivityState();
     }
 
     @Override
     protected void onRestart() {
-        System.out.println("FileSharingClientActivity: onRestart");
+        System.out.println("FileSharingClientActivity: onRestart()");
         super.onRestart();
     }
 
     @Override
     protected void onResume() {
-        System.out.println("FileSharingClientActivity: onResume");
+        System.out.println("FileSharingClientActivity: onResume()");
         super.onResume();
     }
 
     @Override
     protected void onStart() {
-        System.out.println("FileSharingClientActivity: onStart");
+        System.out.println("FileSharingClientActivity: onStart()");
         super.onStart();
     }
 
     @Override
     protected void onStop() {
-        System.out.println("FileSharingClientActivity: onStop");
+        System.out.println("FileSharingClientActivity: onStop()");
         super.onStop();
     }
-
-
 }
