@@ -39,7 +39,7 @@ public class RampLocalService extends Service {
 
     public class RAMPAndroidServiceBinder extends Binder{
         public RampEntryPoint getRampEntryPoint() {
-        	System.out.println("RampLocalService: getRampEntryPoint");
+        	System.out.println("RampLocalService: getRampEntryPoint()");
         	return ramp;
         }
     }
@@ -51,8 +51,8 @@ public class RampLocalService extends Service {
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            System.out.println("RampLocalService, broadcastReceiver:  onReceive");
-            System.out.println("RampLocalService, intent Action:" + intent.getAction());
+            System.out.println("RampLocalService, broadcastReceiver:  onReceive()");
+//            System.out.println("RampLocalService, intent Action:" + intent.getAction());
             if (intent.getAction().equals(Constants.RAMP_INTENT_ACTION)) {
                 // Get extra data included in the Intent
                 int value = intent.getIntExtra("data", -1);

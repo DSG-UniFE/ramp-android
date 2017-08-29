@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 
-import it.unibo.deis.lia.ramp.util.Benchmark;
 import it.unife.dsg.ramp_android.R;
 import it.unife.dsg.ramp_android.RampManagerActivity;
 import it.unife.dsg.ramp_android.util.Constants;
@@ -19,8 +18,8 @@ public class LCCReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        System.out.println("LCCReceiver:  onReceive");
-        System.out.println("Intent Action:" + intent.getAction());
+        System.out.println("LCCReceiver:  onReceive()");
+//        System.out.println("Intent Action:" + intent.getAction());
 
         if (intent.getAction().equals(Constants.LCC_INTENT_ACTION)) {
             Bundle extras = intent.getExtras();
@@ -29,37 +28,24 @@ public class LCCReceiver extends BroadcastReceiver {
 //                        System.out.println("Intent Extra key=" + key + ":" + extras.get(key));
 //                        showNotification(context, "Pippo", "Pluto");
 //                    }
-                System.out.println("LCCReceiver >>> " + extras.getInt("data"));
+//                System.out.println("LCCReceiver >>> " + extras.getInt("data"));
                 switch (extras.getInt("data")) {
                     case Constants.MESSAGE_LCC_DEACTIVATE:
-                        // FIXME
-                        Benchmark.append(System.currentTimeMillis(), "ramp_lcc_receiver_deactivate",
-                                0, 0, 0);
                         break;
 
                     case Constants.MESSAGE_LCC_ACTIVATE:
-                        // FIXME
-                        Benchmark.append(System.currentTimeMillis(), "ramp_lcc_receiver_activate",
-                                0, 0, 0);
                         break;
 
                     case Constants.MESSAGE_ROLE_CHANGED:
                         sendLocalBroadcast(context, Constants.MESSAGE_ROLE_CHANGED);
-                        System.out.println("LCCReceiver sent message " +
-                                Constants.MESSAGE_ROLE_CHANGED);
-                        // FIXME
-                        Benchmark.append(System.currentTimeMillis(), "ramp_lcc_receiver_changed_role",
-                                0, 0, 0);
-
+//                        System.out.println("LCCReceiver sent message " +
+//                                Constants.MESSAGE_ROLE_CHANGED);
                         break;
 
                     case Constants.MESSAGE_HOTSPOT_CHANGED:
                         sendLocalBroadcast(context, Constants.MESSAGE_HOTSPOT_CHANGED);
-                        System.out.println("LCCReceiver sent message " +
-                                Constants.MESSAGE_HOTSPOT_CHANGED);
-                        // FIXME
-                        Benchmark.append(System.currentTimeMillis(), "ramp_lcc_receiver_changed_hotspot",
-                                0, 0, 0);
+//                        System.out.println("LCCReceiver sent message " +
+//                                Constants.MESSAGE_HOTSPOT_CHANGED);
                         break;
                 }
             }

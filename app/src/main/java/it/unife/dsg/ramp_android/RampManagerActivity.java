@@ -44,7 +44,6 @@ import it.unibo.deis.lia.ramp.RampEntryPoint;
 import it.unibo.deis.lia.ramp.core.e2e.GenericPacket;
 import it.unibo.deis.lia.ramp.core.internode.Resolver;
 import it.unibo.deis.lia.ramp.core.internode.ResolverPath;
-import it.unibo.deis.lia.ramp.util.Benchmark;
 import it.unife.dsg.ramp_android.helper.RampLocalService;
 import it.unife.dsg.ramp_android.util.Util;
 
@@ -222,10 +221,6 @@ public class RampManagerActivity extends AppCompatActivity implements OnClickLis
         			Util.showShortToast(this, "Activate Continuity Manager!");
                 }
         		else{
-
-                    // FIXME
-                    Benchmark.createFile();
-
         			//start activity Opportunistic Networking Manager
         			try{
                         Class<?> activityClass = Class.forName("it.unife.dsg." +
@@ -292,8 +287,6 @@ public class RampManagerActivity extends AppCompatActivity implements OnClickLis
                                                 E2EComm.serialize(""));
                                         sent = true;
                                     }
-                                    // FIXME
-                                    Benchmark.append(System.currentTimeMillis(), "ramp_manager_activity_send_unicast_message", 0, 0, 0);
                                 } else {
 //                                    E2EComm.sendBroadcast(10,
 //                                        port,
@@ -301,9 +294,6 @@ public class RampManagerActivity extends AppCompatActivity implements OnClickLis
 //                                        700,
 //                                        E2EComm.serialize(""));
 //                                    sent = true;
-//
-//                                    // FIXME
-//                                    Benchmark.append(System.currentTimeMillis(), "ramp_manager_activity_send_broadcast_message", 0, 0, 0);
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();

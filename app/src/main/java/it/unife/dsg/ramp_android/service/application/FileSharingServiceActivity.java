@@ -97,10 +97,10 @@ public class FileSharingServiceActivity extends AppCompatActivity implements
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         switch(buttonView.getId()){
             case R.id.fileSharingServiceActive:
-                System.out.println("FileSharingServiceActivity: onCheckedChanged = " +
-                        "R.id.fileSharingServiceActive " + isChecked);
-                System.out.println("FileSharingServiceActivity: FileSharingService.isActive() = " +
-                        FileSharingService.isActive());
+//                System.out.println("FileSharingServiceActivity: onCheckedChanged() = " +
+//                        "R.id.fileSharingServiceActive " + isChecked);
+//                System.out.println("FileSharingServiceActivity: FileSharingService.isActive() = " +
+//                        FileSharingService.isActive());
                 if (isChecked && !FileSharingService.isActive()) {
                     System.out.println("FileSharingServiceActivity: onCheckedChanged = " +
                             "activating...");
@@ -124,7 +124,6 @@ public class FileSharingServiceActivity extends AppCompatActivity implements
                     }
                     catch(Exception e){
                         e.printStackTrace();
-                        System.out.println("FileSharingServiceActivity stop: FileSharingService");
                     }
                 }
                 break;
@@ -176,7 +175,7 @@ public class FileSharingServiceActivity extends AppCompatActivity implements
 
     @Override
     public void onBackPressed() {
-        System.out.println("FileSharingServiceActivity: onBackPressed");
+        System.out.println("FileSharingServiceActivity: onBackPressed()");
         super.onBackPressed();
     }
 
@@ -207,7 +206,7 @@ public class FileSharingServiceActivity extends AppCompatActivity implements
 
     @Override
     protected void onResume() {
-        System.out.println("FileSharingServiceActivity: onResume");
+        System.out.println("FileSharingServiceActivity: onResume()");
         super.onResume();
         CheckBox fssActive = (CheckBox)findViewById(R.id.fileSharingServiceActive);
         System.out.println("FileSharingServiceActivity: FileSharingService.isActive() = " +
@@ -217,7 +216,7 @@ public class FileSharingServiceActivity extends AppCompatActivity implements
 
     @Override
     protected void onDestroy() {
-        System.out.println("FileSharingServiceActivity: onDestroy, isFinishing = " + this.isFinishing());
+        System.out.println("FileSharingServiceActivity: onDestroy(), isFinishing = " + this.isFinishing());
         super.onDestroy();
     }
 }

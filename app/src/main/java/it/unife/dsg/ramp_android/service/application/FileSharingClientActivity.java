@@ -275,46 +275,44 @@ public class FileSharingClientActivity extends AppCompatActivity implements OnCl
 
     @Override
     public void onBackPressed() {
-        System.out.println("FileSharingClientActivity: onBackPressed");
+        System.out.println("FileSharingClientActivity: onBackPressed()");
         super.onBackPressed();
     }
 
     @Override
     protected void onDestroy() {
-        System.out.println("FileSharingClientActivity: onDestroy, isFinishing = " + this.isFinishing());
+        System.out.println("FileSharingClientActivity: onDestroy(), isFinishing = " + this.isFinishing());
         super.onDestroy();
     }
 
     @Override
     protected void onPause() {
-        System.out.println("FileSharingClientActivity: onPause, isFinishing = " + this.isFinishing());
+        System.out.println("FileSharingClientActivity: onPause(), isFinishing = " + this.isFinishing());
         super.onPause();
         saveActivityState();
     }
 
     @Override
     protected void onRestart() {
-        System.out.println("FileSharingClientActivity: onRestart");
+        System.out.println("FileSharingClientActivity: onRestart()");
         super.onRestart();
     }
 
     @Override
     protected void onResume() {
-        System.out.println("FileSharingClientActivity: onResume");
+        System.out.println("FileSharingClientActivity: onResume()");
         super.onResume();
     }
 
     @Override
     protected void onStart() {
-        System.out.println("FileSharingClientActivity: onStart");
+        System.out.println("FileSharingClientActivity: onStart()");
         super.onStart();
     }
 
     @Override
     protected void onStop() {
-        System.out.println("FileSharingClientActivity: onStop");
+        System.out.println("FileSharingClientActivity: onStop()");
         super.onStop();
     }
-
-
 }
