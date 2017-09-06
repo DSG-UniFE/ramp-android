@@ -45,6 +45,7 @@ import it.unibo.deis.lia.ramp.core.e2e.GenericPacket;
 import it.unibo.deis.lia.ramp.core.internode.Resolver;
 import it.unibo.deis.lia.ramp.core.internode.ResolverPath;
 import it.unife.dsg.ramp_android.helper.RampLocalService;
+import it.unife.dsg.ramp_android.helper.StatsService;
 import it.unife.dsg.ramp_android.util.Util;
 
 import it.unibo.deis.lia.ramp.core.e2e.E2EComm;
@@ -59,12 +60,15 @@ public class RampManagerActivity extends AppCompatActivity implements OnClickLis
     private static RampManagerActivity managerActivity=null;
     private Handler uiHandler;
 
+//    private StatsService statsService;
+//    private boolean statsBound = false;
+
 //    private Facebook facebook;
 //    private SocialObserverFacebook socialObserverFacebook;
     
     private ServiceConnection sc = new ServiceConnection() {
         public void onServiceConnected(ComponentName name, IBinder service) {
-            System.out.println("RampManagerActivity: onServiceConnected()");
+            System.out.println("RampManagerActivity.sc: onServiceConnected()");
             String text = null;
 
             ramp = ((RampLocalService.RAMPAndroidServiceBinder) service).getRampEntryPoint();
@@ -92,11 +96,36 @@ public class RampManagerActivity extends AppCompatActivity implements OnClickLis
         }
         
         public void onServiceDisconnected(ComponentName arg0) {
-            System.out.println("RampManagerActivity: onServiceDisconnected()");
+            System.out.println("RampManagerActivity.sc: onServiceDisconnected()");
             ramp = null;
             ((CheckBox) findViewById(R.id.rampActive)).setChecked(false);
         }
     };
+
+
+    /**
+     * Defines callbacks for service binding, passed to bindService()
+     */
+//    private ServiceConnection statsConnection = new ServiceConnection() {
+//
+//        @Override
+//        public void onServiceConnected(ComponentName className, IBinder service) {
+//            // We've bound to StatsService, cast the IBinder and get StatsService instance
+//            System.out.println("RampManagerActivity.statsConnection: onServiceConnected()");
+//            StatsService.StatsBinder binder = (StatsService.StatsBinder) service;
+//            statsService = binder.getService();
+//            statsBound = true;
+//        }
+//
+//        @Override
+//        public void onServiceDisconnected(ComponentName className) {
+//            // This is called when the connection with the service has been
+//            // unexpectedly disconnected -- that is, its process crashed.
+//            System.out.println("RampManagerActivity.statsConnection: onServiceDisconnected()");
+//            statsService = null;
+//            statsBound = false;
+//        }
+//    };
 
     //private MulticastLock wifiMulticastLock;
     
@@ -445,13 +474,19 @@ public class RampManagerActivity extends AppCompatActivity implements OnClickLis
         final int id = buttonView.getId();
         switch (id) {
             case R.id.rampActive:
-                System.out.println("RAMPManagerActivity: onCheckedChanged = R.id.rampActive " + isChecked);
+                System.out.println("RAMPManagerActivity: onCheckedChanged = R.id.rampActive "
+                        + isChecked);
                 if (isChecked) {
                     if (ramp == null) {
                         Intent serviceIntent = new Intent(this, RampLocalService.class);
                         startService(serviceIntent);
                         bindService(serviceIntent, sc, Context.BIND_AUTO_CREATE);
                     }
+
+//                    if (!statsService.statsThreadIsActive()) {
+//                        statsService.startStatsThread(getApplicationContext(),
+//                                "it.unife.dsg.ramp_android");
+//                    }
                 } else {
                     if (ramp != null) {
                         //stop upnp
@@ -479,6 +514,8 @@ public class RampManagerActivity extends AppCompatActivity implements OnClickLis
 //                        showFacebookLoginButton();
 
                         ramp = null;
+
+//                        statsService.stopStatsThread();
                     }
                 }
                 break;
@@ -559,6 +596,12 @@ public class RampManagerActivity extends AppCompatActivity implements OnClickLis
         if (RampEntryPoint.isActive()) {
         	bindService(new Intent(this, RampLocalService.class), sc, Context.BIND_AUTO_CREATE);
         }
+
+//        if (!statsBound) {
+//            // Bind to LocalService
+//            Intent statsIntent = new Intent(this, StatsService.class);
+//            bindService(statsIntent, statsConnection, Context.BIND_AUTO_CREATE);
+//        }
     }
 
     @Override
@@ -568,6 +611,12 @@ public class RampManagerActivity extends AppCompatActivity implements OnClickLis
         if (ramp != null) {
         	unbindService(sc);
         }
+
+        // Unbind from the service
+//        if (!statsService.statsThreadIsActive()) {
+//            unbindService(statsConnection);
+//            statsBound = false;
+//        }
     }
     
 

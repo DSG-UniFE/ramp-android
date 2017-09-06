@@ -30,21 +30,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <service
-            android:name="it.unife.dsg.ramp_android.helper.RampLocalService"
-            android:label="RAMP Local Service" >
-            <intent-filter>
-                <action android:name="it.unife.dsg.ramp_android.RampLocalService" />
-            </intent-filter>
-        </service>
-        <receiver android:name=".helper.LCCReceiver">
-            <intent-filter>
-                <action android:name="it.unife.dsg.ramp_android.action.LCC"/>
-            </intent-filter>
-        </receiver>
-
-
         <activity
             android:name="it.unife.dsg.ramp_android.service.application.OpportunisticNetworkingManagerActivity"
             android:label="ON Manager">
@@ -87,6 +72,27 @@
             android:label="Broadcast Client">
             <!-- android:launchMode="singleInstance"-->
         </activity>
+
+        <service
+            android:name="it.unife.dsg.ramp_android.helper.RampLocalService"
+            android:label="RAMP Local Service" >
+            <intent-filter>
+                <action android:name="it.unife.dsg.ramp_android.RampLocalService" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="it.unife.dsg.ramp_android.helper.StatsService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="it.unife.dsg.ramp_android.helper.StatsService" />
+            </intent-filter>
+        </service>
+
+        <receiver android:name=".helper.LCCReceiver">
+            <intent-filter>
+                <action android:name="it.unife.dsg.ramp_android.action.LCC"/>
+            </intent-filter>
+        </receiver>
 
     </application>
 
